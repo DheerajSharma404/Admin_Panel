@@ -72,3 +72,24 @@ export interface Product {
   productSample: string;
   productFile: string;
 }
+export interface Job {
+  id: string;
+  title: string;
+  department: string;
+  Description: string;
+  status: string;
+}
+export interface JobHeadings {
+  key: string;
+  label: string;
+}
+export interface JobApplication {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  gender: string;
+  portfolioLink: string;
+  coverNote: string;
+  resumeLink: string;
+  coverLetterLink: string;

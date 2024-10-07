@@ -10,5 +10,23 @@ import UserCalender from "./UserCalender";
 import TaskDetails from "./TaskDetails";
 import AddProducts from "./productsModule/AddProducts";
 import ProductTable from "./productsModule/ProductTable";
-
-export { Dashboard, Auth, Products, Users, Welcome, TaskManagerDashboard, Tasks, UserProfile, UserCalender, TaskDetails, AddProducts, ProductTable };
+import AllJobs from "./Hiring/AllJobs";
+import CreateJob from "./Hiring/createJob";
+import ViewApplications from "./Hiring/ViewApplications";
+export {
+    Dashboard,
+    Auth,
+    Products,
+    Users,
+    Welcome,
+    TaskManagerDashboard,
+    Tasks,
+    UserProfile,
+    UserCalender,
+    TaskDetails,
+    AddProducts,
+    ProductTable,
+    AllJobs,
+    CreateJob,
+    ViewApplications
+};

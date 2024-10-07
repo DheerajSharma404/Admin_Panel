@@ -39,7 +39,7 @@ const TaskDetail: React.FC = () => {
                     </div>
                     <div>
                         <h2 className="text-xl font-semibold">Assignee</h2>
-                        <p className="mt-1">{renderAssignees(task.assignee)}</p>
+                        <p className="mt-1">{renderAssignees(task.assignee)}</p>   
                     </div>
                     <div>
                         <h2 className="text-xl font-semibold">Project Name</h2>

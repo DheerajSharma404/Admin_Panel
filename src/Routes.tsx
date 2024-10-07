@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes as RouterRoutes } from 'react-router-dom';
-import { Dashboard, Auth, Products, Users, Welcome, TaskManagerDashboard, Tasks, UserProfile, UserCalender, TaskDetails, AddProducts, ProductTable } from './pages/index';
+import { Dashboard, Auth, Products, Users, Welcome, TaskManagerDashboard, Tasks, UserProfile, UserCalender, TaskDetails, AddProducts, ProductTable, AllJobs, CreateJob, ViewApplications } from './pages/index';
 import MainLayout from './layout/MainLayout';
 import TaskStatistics from './pages/TasksStaistics';
 const routes = [
@@ -18,6 +18,9 @@ const routes = [
   { path: '/task/:taskId', component: <MainLayout><TaskDetails/></MainLayout>, exact: true },
   { path: '/add-products', component: <MainLayout><AddProducts/></MainLayout>, exact: true },
   { path: '/product-table', component: <MainLayout><ProductTable/></MainLayout>, exact: true },
+  { path: '/all-jobs', component: <MainLayout><AllJobs/></MainLayout>, exact: true },
+  { path: '/hiring-form', component: <MainLayout><CreateJob/></MainLayout>, exact: true },
+  { path: '/view-applications', component: <MainLayout><ViewApplications/></MainLayout>, exact: true },
 ];
 
 const Routes: React.FC = () => {
