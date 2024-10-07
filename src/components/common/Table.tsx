@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { FaEdit, FaEye, FaTrash, FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import { ITable } from "../../types";
 

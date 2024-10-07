@@ -1,12 +1,23 @@
 import React from 'react';
 import { Route, Routes as RouterRoutes } from 'react-router-dom';
-import { Dashboard, Auth, Products, Users } from './pages/index';
-
+import { Dashboard, Auth, Products, Users, Welcome, TaskManagerDashboard, Tasks, UserProfile, UserCalender, TaskDetails, AddProducts, ProductTable } from './pages/index';
+import MainLayout from './layout/MainLayout';
+import TaskStatistics from './pages/TasksStaistics';
 const routes = [
-  { path: '/', component: Dashboard, exact: true },
-  { path: '/auth', component: Auth, exact: true },
-  { path: '/products', component: Products, exact: true },
-  { path: '/users', component: Users, exact: true },
+  { path: '/', component: <Welcome />, exact: true },
+  { path: '/dashboard', component: <Dashboard />, exact: true },
+  { path: '/auth', component: <Auth />, exact: true },
+  { path: '/products', component: <MainLayout><Products /></MainLayout>, exact: true },
+  { path: '/users', component: <MainLayout><Users /></MainLayout>, exact: true },
+  { path: '/taskDashboard', component: <MainLayout><TaskManagerDashboard /></MainLayout>, exact: true },
+  { path: '/tasks', component: <MainLayout><Tasks /></MainLayout>, exact: true },
+  { path: '/UserProfile', component: <MainLayout><UserProfile/></MainLayout>, exact: true },
+  { path: '/taskStatistics', component: <MainLayout><TaskStatistics/></MainLayout>, exact: true },
+  { path: '/calender', component: <MainLayout><UserCalender/></MainLayout>, exact: true },
+  { path: '/taskDetails/:taskId', component: <MainLayout><TaskDetails/></MainLayout>, exact: true },
+  { path: '/task/:taskId', component: <MainLayout><TaskDetails/></MainLayout>, exact: true },
+  { path: '/add-products', component: <MainLayout><AddProducts/></MainLayout>, exact: true },
+  { path: '/product-table', component: <MainLayout><ProductTable/></MainLayout>, exact: true },
 ];
 
 const Routes: React.FC = () => {
@@ -16,10 +27,11 @@ const Routes: React.FC = () => {
         <Route 
           key={index} 
           path={route.path} 
-          element={<route.component />} 
+          element={route.component} 
         />
       ))}
     </RouterRoutes>
+    
   );
 };
 

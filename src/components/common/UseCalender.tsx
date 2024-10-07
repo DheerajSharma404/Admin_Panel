@@ -48,7 +48,7 @@ const CalendarComponent: React.FC<{ events: IEvent[] }> = ({ events }) => {
         events={adjustedEvents}
         startAccessor="start"
         endAccessor="end"
-        titleAccessor={(event) => `${event.title} (${event.type})`}
+        titleAccessor={(event: { title: string; type: string }) => `${event.title} (${event.type})`}
         style={{ height: 500 }}
         eventPropGetter={eventStyleGetter}
       />
