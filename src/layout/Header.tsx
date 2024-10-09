@@ -10,7 +10,7 @@ const Header = () => {
     <header className="w-full shadow-md rounded-l-sm">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-2xl font-bold tracking-tight"><span className="text-blue-600">Mentoons</span> Admin</div>
+          <div className="text-2xl font-bold tracking-tight">Mentoon's, Admin Panel</div>
           <div className="relative">
             <button
               className="flex items-center space-x-3 focus:outline-none"

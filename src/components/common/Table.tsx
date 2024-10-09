@@ -1,4 +1,3 @@
-import { useState, useMemo } from 'react';
 import { FaEdit, FaEye, FaTrash, FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import { ITable } from "../../types";
 
@@ -6,14 +5,15 @@ interface DynamicTableProps extends ITable {
   onEdit: (row: any) => void;
   onDelete: (row: any) => void;
   onView: (row: any) => void;
+  onSort: (field: string) => void;
+  sortField: string;
+  sortOrder: string;
+  handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  searchTerm: string;
 }
 
-const DynamicTable = ({ data, onEdit, onDelete, onView }: DynamicTableProps) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortColumn, setSortColumn] = useState('');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+const DynamicTable = ({ data, onEdit, onDelete, onView,onSort,sortField,sortOrder,searchTerm,handleSearch,}: DynamicTableProps) => {
+ 
 
   const tableData = Array.isArray(data) ? data : (Array.isArray((data as any)?.data) ? (data as any).data : []);
   const columnKeys = tableData.length > 0 ? Object.keys(tableData[0]).filter(key => !Array.isArray(tableData[0][key]) && key !== '_id') : [];
@@ -49,45 +49,10 @@ const DynamicTable = ({ data, onEdit, onDelete, onView }: DynamicTableProps) => 
     return truncateText(value, 20);
   };
 
-  const filteredAndSortedData = useMemo(() => {
-    let result = [...tableData];
-
-    if (searchTerm) {
-      result = result.filter(row =>
-        Object.values(row).some(value =>
-          String(value).toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
-    }
-
-    if (sortColumn) {
-      result.sort((a, b) => {
-        if (a[sortColumn] < b[sortColumn]) return sortDirection === 'asc' ? -1 : 1;
-        if (a[sortColumn] > b[sortColumn]) return sortDirection === 'asc' ? 1 : -1;
-        return 0;
-      });
-    }
-
-    return result;
-  }, [tableData, searchTerm, sortColumn, sortDirection]);
-  const pageCount = Math.ceil(filteredAndSortedData.length / itemsPerPage);
-  const paginatedData = filteredAndSortedData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  const handleSort = (column: string) => {
-    if (column === sortColumn) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortColumn(column);
-      setSortDirection('asc');
-    }
-  };
 
   const renderSortIcon = (column: string) => {
-    if (column !== sortColumn) return <FaSort />;
-    return sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />;
+    if (column !== sortField) return <FaSort />;
+    return sortOrder === 'asc' ? <FaSortUp /> : <FaSortDown />;
   };
 
   return (
@@ -97,7 +62,7 @@ const DynamicTable = ({ data, onEdit, onDelete, onView }: DynamicTableProps) => 
           type="text"
           placeholder="Search..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => handleSearch(e)}
           className="p-2 border rounded"
         />
       </div>
@@ -108,7 +73,7 @@ const DynamicTable = ({ data, onEdit, onDelete, onView }: DynamicTableProps) => 
               <th
                 key={index}
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => handleSort(key)}
+                onClick={() => onSort(key)}
               >
                <div className='flex items-center gap-2'>{key} {renderSortIcon(key)}</div>
               </th>
@@ -117,7 +82,7 @@ const DynamicTable = ({ data, onEdit, onDelete, onView }: DynamicTableProps) => 
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {paginatedData.map((row: any, rowIndex: number) => (
+          {tableData.map((row: any, rowIndex: number) => (
             <tr key={rowIndex} className="hover:bg-gray-100">
               {columnKeys
                 .filter(key => key !== '_id')
@@ -141,7 +106,7 @@ const DynamicTable = ({ data, onEdit, onDelete, onView }: DynamicTableProps) => 
           ))}
         </tbody>
       </table>
-      <div className="mt-4 flex justify-between items-center">
+      {/* <div className="mt-4 flex justify-between items-center">
         <div>
           Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredAndSortedData.length)} of {filteredAndSortedData.length} entries
         </div>
@@ -161,7 +126,7 @@ const DynamicTable = ({ data, onEdit, onDelete, onView }: DynamicTableProps) => 
             Next
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

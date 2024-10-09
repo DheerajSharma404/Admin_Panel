@@ -3,7 +3,7 @@ import { IconType } from "react-icons";
 export interface IAuth {
   email: string;
   password: string;
-  rememberMe: boolean;  
+  rememberMe: boolean;
 }
 
 export interface IQuotes {
@@ -72,17 +72,7 @@ export interface Product {
   productSample: string;
   productFile: string;
 }
-export interface Job {
-  id: string;
-  title: string;
-  department: string;
-  Description: string;
-  status: string;
-}
-export interface JobHeadings {
-  key: string;
-  label: string;
-}
+
 export interface JobApplication {
   id: number;
   name: string;
@@ -93,3 +83,40 @@ export interface JobApplication {
   coverNote: string;
   resumeLink: string;
   coverLetterLink: string;
+}
+
+export interface JobData {
+  _id: string;
+  jobTitle: string;
+  jobDescription: string;
+  skillsRequired: string[];
+  location: string;
+  jobType: string;
+  thumbnail: string;
+  applicationCount: number;
+}
+
+export interface JobDataResponse {
+  success: boolean;
+  data: {
+    jobs: JobData[];
+    currentPage: number;
+    totalPages: number;
+    totalJobs: number;
+  };
+}
+export interface JobApplicationResponse {
+  success: boolean;
+  data:{
+    jobs:JobApplication[],
+    currentPage:number,
+    totalPages:number,
+    totalJobs:number
+  }
+}
+
+export interface Pagination {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+}

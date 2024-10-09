@@ -11,7 +11,7 @@ import TaskDetails from "./TaskDetails";
 import AddProducts from "./productsModule/AddProducts";
 import ProductTable from "./productsModule/ProductTable";
 import AllJobs from "./Hiring/AllJobs";
-import CreateJob from "./Hiring/createJob";
+import CreateJob from "./Hiring/CreateJob";
 import ViewApplications from "./Hiring/ViewApplications";
 export {
     Dashboard,
