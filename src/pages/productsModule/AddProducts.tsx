@@ -25,6 +25,7 @@ const validationSchema = Yup.object({
 const AddProducts = () => {
     const location = useLocation();
     const initialProduct = location.state?.product;
+    console.log(initialProduct, "initialProduct")
     const navigate = useNavigate();
 
     const uploadFile = async (file: File, fieldName: string) => {
@@ -58,8 +59,8 @@ const AddProducts = () => {
             };
 
             const url = 'http://localhost:4000/api/v1/products';
-            const method = initialProduct ? 'PUT' : 'POST';
-            const productId = initialProduct?.id;
+            const method = initialProduct ? 'PATCH' : 'POST';
+            const productId = initialProduct?._id;
 
             const response = await fetch(initialProduct ? `${url}/${productId}` : url, {
                 method,
@@ -111,8 +112,8 @@ const AddProducts = () => {
                                 <option value="">Select a category</option>
                                 <option value="PODCAST">Podcast</option>
                                 <option value="COMIC">Comic</option>
-                                <option value="AUDIO COMIC">Podcast</option>
-                                <option value="MISC">M</option>
+                                <option value="AUDIO COMIC">Audio Comic</option>
+                                <option value="MISC">Miscellaneous</option>
                             </Field>
                             <ErrorMessage name="productCategory" component="div" className='text-red-500 text-sm' />
                         </div>

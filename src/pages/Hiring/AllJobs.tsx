@@ -1,38 +1,66 @@
 import { useState, useCallback, useEffect } from 'react';
 import DynamicTable from '../../components/common/Table';
-import { useGetJobsQuery } from '../../features/career/careerApi';
+import { useDeleteJobMutation, useGetJobsQuery } from '../../features/career/careerApi';
 import { JobData } from '../../types';
 import debounce from 'lodash/debounce';
 import Pagination from '../../components/common/Pagination';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import DeleteConfirmationModal from '../../components/common/DeleteConfirmationModal';
 
 const AllJobs = () => {
+    const navigate = useNavigate();
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [limit, setLimit] = useState<number>(10);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [jobToDelete, setJobToDelete] = useState<JobData | null>(null);
 
-    const { data, isLoading, isError, error } = useGetJobsQuery({
+    const { data, isLoading, isError, error, refetch } = useGetJobsQuery({
         sortOrder,
         searchTerm: debouncedSearchTerm,
         page: currentPage,
         limit,
     });
-
+    const [deleteJob] = useDeleteJobMutation();
     const handleEdit = (job: JobData) => {
-        console.log('Edit job:', job);
+        navigate('/hiring-form', { state: { id: job._id } });
     };
 
     const handleDelete = (job: JobData) => {
-        console.log('Delete job:', job);
+        setJobToDelete(job);
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        console.log(jobToDelete)
+        if (jobToDelete) {
+            try {
+                const result = await deleteJob(jobToDelete._id);
+                console.log(result)
+                if(!result){
+                    toast.error('Failed to delete job');
+                }else{
+                    toast.success('Job deleted successfully');
+                    refetch();
+                }
+            } catch (error) {
+                console.error('Error deleting job:', error);
+                toast.error('Failed to delete job');
+            }
+        }
+        setIsDeleteModalOpen(false);
+        setJobToDelete(null);
     };
 
     const handleView = (job: JobData) => {
-        console.log('View job:', job);
+        navigate(`/job-details/${job._id}`);
     };
 
     const handleSort = () => {
-        setSortOrder('asc');
+        setSortOrder(prevOrder => prevOrder === 'asc' ? 'desc' : 'asc');
     };
 
     const debouncedSearch = useCallback(
@@ -68,7 +96,7 @@ const AllJobs = () => {
     const { jobs, totalPages, totalJobs } = data.data;
 
     return (
-        <div>
+        <div className='h-full p-4'>
             <h1 className='text-2xl font-bold mb-4'>All Jobs</h1>
             <DynamicTable
                 headings={['ID', 'Title', 'Department', 'Description', 'Status', 'Applications']}
@@ -92,6 +120,12 @@ const AllJobs = () => {
                     onPageChange={handlePageChange}
                 />
             </div>
+            <DeleteConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                itemName={jobToDelete ? jobToDelete.jobTitle || 'this job' : ''}
+            />
         </div>
     );
 };

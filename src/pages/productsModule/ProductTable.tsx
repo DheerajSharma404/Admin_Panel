@@ -1,16 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import DynamicTable from "../../components/common/Table";
-import { useEffect, useState } from "react";
-import { headings } from "../../utils/constants";
+import { useEffect, useState, useCallback } from "react";
 import { Product } from "../../types";
 import { toast } from 'react-toastify';
 import DeleteConfirmationModal from "../../components/common/DeleteConfirmationModal";
+import debounce from 'lodash/debounce';
+import Pagination from "../../components/common/Pagination";
+import { headings } from "../../utils/constants";
 
 const ProductTable = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
-  const navigate = useNavigate();
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(10);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalProducts, setTotalProducts] = useState<number>(0);
 
   const editProduct = (row: any) => {
     navigate(`/add-products`, { state: { product: row } });
@@ -44,17 +53,46 @@ const ProductTable = () => {
     setProductToDelete(null);
   };
 
-  const viewProduct = (row: any) => {
-    console.log('View product:', row);
+  const viewProduct = (row: Product) => {
+    console.log(row._id,'row')
+    navigate(`/products/${row._id}`);
+  };
+
+  const handleSort = () => {
+    setSortOrder(prevOrder => prevOrder === 'asc' ? 'desc' : 'asc');
+  };
+
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setDebouncedSearchTerm(value);
+    }, 300),
+    []
+  );
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+    debouncedSearch(event.target.value);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleLimitChange = (newLimit: number) => {
+    setLimit(newLimit);
+    setCurrentPage(1);
   };
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:4000/api/v1/products?limit=100');
+        const response = await fetch(`http://localhost:4000/api/v1/products?limit=${limit}&page=${currentPage}&sort=${sortOrder}&search=${debouncedSearchTerm}`);
         const result = await response.json();
-        if (result.success && Array.isArray(result.data)) {
-          setProducts(result.data);
+        console.log(result,'osoo')
+        if (result.success && Array.isArray(result.data.products)) {
+          setProducts(result.data.products);
+          setTotalPages(result.data.totalPages);
+          setTotalProducts(result.data.products.length);
         } else {
           console.error('Fetched data is not in the expected format:', result);
           setProducts([]);
@@ -65,7 +103,11 @@ const ProductTable = () => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [limit, currentPage, sortOrder, debouncedSearchTerm]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchTerm]);
 
   return (
     <div className="p-4">
@@ -76,6 +118,19 @@ const ProductTable = () => {
         onEdit={editProduct}
         onDelete={removeProduct}
         onView={viewProduct}
+        sortField="createdAt"
+        onSort={handleSort}
+        sortOrder={sortOrder}
+        searchTerm={searchTerm}
+        handleSearch={handleSearch}
+      />
+      <Pagination 
+        currentPage={currentPage} 
+        totalPages={totalPages} 
+        totalItems={totalProducts} 
+        limit={limit} 
+        onLimitChange={handleLimitChange}
+        onPageChange={handlePageChange}
       />
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}

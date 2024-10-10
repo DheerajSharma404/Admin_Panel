@@ -61,7 +61,7 @@ const TaskStatistics = () => {
                             fill="#8884d8"
                             dataKey="value"
                         >
-                            {taskData.map((entry, index) => (
+                            {taskData.map((_, index) => (
                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                         </Pie>

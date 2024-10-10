@@ -86,14 +86,15 @@ export interface JobApplication {
 }
 
 export interface JobData {
-  _id: string;
+  _id: string | any;
   jobTitle: string;
   jobDescription: string;
   skillsRequired: string[];
-  location: string;
-  jobType: string;
-  thumbnail: string;
-  applicationCount: number;
+  location?: string;
+  jobType?: string;
+  thumbnail: string | File | null;
+  applicationCount?: number;
+  applicationDetails?: JobApplication[];
 }
 
 export interface JobDataResponse {
@@ -114,6 +115,10 @@ export interface JobApplicationResponse {
     totalJobs:number
   }
 }
+export interface singleJobDataResponse {
+  success: boolean;
+  data:  JobData;
+} 
 
 export interface Pagination {
   currentPage: number;

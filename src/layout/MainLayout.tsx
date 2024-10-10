@@ -8,7 +8,7 @@ const MainLayout = ({children}: {children: React.ReactNode}) => {
       <Sidebar />
       <div className="flex flex-col flex-grow">
         <Header />
-        <main className="flex-grow overflow-y-auto p-4">
+        <main className="flex-grow overflow-y-scroll p-4">
           {children}
         </main>
         <Footer />

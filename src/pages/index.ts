@@ -13,6 +13,8 @@ import ProductTable from "./productsModule/ProductTable";
 import AllJobs from "./Hiring/AllJobs";
 import CreateJob from "./Hiring/CreateJob";
 import ViewApplications from "./Hiring/ViewApplications";
+import ViewProduct from "./productsModule/ViewProducts";
+import JobDetails from "./Hiring/ViewJobDetails";
 export {
     Dashboard,
     Auth,
@@ -28,5 +30,7 @@ export {
     ProductTable,
     AllJobs,
     CreateJob,
-    ViewApplications
+    ViewApplications,
+    ViewProduct,
+    JobDetails
 };

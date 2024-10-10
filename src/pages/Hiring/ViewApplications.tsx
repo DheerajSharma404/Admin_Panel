@@ -72,7 +72,7 @@ console.log(data?.data?.jobs)
             <DynamicTable
                 headings={['Name', 'Email', 'Phone', 'Gender', 'Portfolio Link', 'Cover Note', 'Resume Link', 'Cover Letter Link']}
                 data={jobs}
-                sortField="Name"  // Add this line
+                sortField="Name" 
                 onEdit={handleEdit}
                 onDelete={handleDelete}
                 onView={handleView}

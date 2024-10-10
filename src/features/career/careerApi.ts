@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { JobApplicationResponse, JobData, JobDataResponse } from "../../types";
+import { JobApplicationResponse, JobData, JobDataResponse, singleJobDataResponse } from "../../types";
 
 
 
@@ -20,7 +20,7 @@ export const careerApiSlice = createApi({
          }),
          providesTags: ['Jobs']
       }),
-      getJobById: builder.query<JobDataResponse, string>({
+      getJobById: builder.query<singleJobDataResponse, string>({
          query: (id) => ({
             url: `/jobs/${id}`,
             method: 'GET',
@@ -78,4 +78,4 @@ export const careerApiSlice = createApi({
    })
 })
 
-export const { useGetJobsQuery, useCreateJobMutation, useUpdateJobMutation, useDeleteJobMutation,useAppliedJobQuery } = careerApiSlice
+export const { useGetJobsQuery, useCreateJobMutation, useUpdateJobMutation, useDeleteJobMutation,useAppliedJobQuery,useGetJobByIdQuery } = careerApiSlice
