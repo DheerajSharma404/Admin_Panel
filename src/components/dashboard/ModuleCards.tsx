@@ -1,24 +1,31 @@
+import { useNavigate } from "react-router-dom";
+
 const ModuleCards = () => {
+    const navigate = useNavigate();
     const modules = [
         {
             name: "User Management",
             description: "Manage users in the system",
             image: "https://cdn-icons-png.flaticon.com/512/2321/2321232.png",
+            link: "/user-management",
         },
         {
             name: "Product Management",
             description: "Manage products in the system",
             image: "https://cdn-icons-png.flaticon.com/512/2321/2321232.png",
+            link: "/products",
         },
         {
-            name: "Reports",
+            name: "Hiring",
             description: "View reports in the system",
             image: "https://cdn-icons-png.flaticon.com/512/2321/2321232.png",
+            link: "/all-jobs",
         },
         {
             name: "Contest Management",
             description: "Manage contests in the system",
             image: "https://cdn-icons-png.flaticon.com/512/2321/2321232.png",
+            link: "/contest-management",
         },
     ];
 
@@ -27,6 +34,9 @@ const ModuleCards = () => {
             {modules.map((module, index) => (
                 <div
                     key={index}
+                    onClick={() => {
+                        navigate(module.link);
+                    }}
                     className="bg-gray-200 rounded-lg shadow-lg p-6 flex flex-col items-center transition-transform transform hover:scale-105 hover:bg-gray-300"
                 >
                     <img src={module.image} alt={module.name} className="w-16 h-16 mb-4" />

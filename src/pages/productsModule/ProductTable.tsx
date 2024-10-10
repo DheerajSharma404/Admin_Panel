@@ -33,7 +33,7 @@ const ProductTable = () => {
   const confirmDelete = async () => {
     if (productToDelete) {
       try {
-        const response = await fetch(`http://localhost:4000/api/v1/products/${productToDelete._id}`, {
+        const response = await fetch(`https://mentoons-backend-zlx3.onrender.com/api/v1/products/${productToDelete._id}`, {
           method: 'DELETE',
         });
         
@@ -86,7 +86,7 @@ const ProductTable = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/api/v1/products?limit=${limit}&page=${currentPage}&sort=${sortOrder}&search=${debouncedSearchTerm}`);
+        const response = await fetch(`https://mentoons-backend-zlx3.onrender.com/api/v1/products?limit=${limit}&page=${currentPage}&sort=${sortOrder}&search=${debouncedSearchTerm}`);
         const result = await response.json();
         console.log(result,'osoo')
         if (result.success && Array.isArray(result.data.products)) {

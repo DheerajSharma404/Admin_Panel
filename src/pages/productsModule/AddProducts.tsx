@@ -32,7 +32,7 @@ const AddProducts = () => {
         const formData = new FormData();
         formData.append('file', file);
 
-        const response = await fetch('http://localhost:4000/api/v1/upload/file', {
+        const response = await fetch('https://mentoons-backend-zlx3.onrender.com/api/v1/upload/file', {
             method: 'POST',
             body: formData,
         });
