@@ -15,6 +15,8 @@ import CreateJob from "./Hiring/CreateJob";
 import ViewApplications from "./Hiring/ViewApplications";
 import ViewProduct from "./productsModule/ViewProducts";
 import JobDetails from "./Hiring/ViewJobDetails";
+import DashboardAnalytics from "./DashboardAnalytics";
+import GetWorkshopEnquiries from "./workshopModule/GetWorkshopEnquiries";
 export {
     Dashboard,
     Auth,
@@ -32,5 +34,7 @@ export {
     CreateJob,
     ViewApplications,
     ViewProduct,
-    JobDetails
+    JobDetails,
+    DashboardAnalytics,
+    GetWorkshopEnquiries
 };

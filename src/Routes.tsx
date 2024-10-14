@@ -1,13 +1,12 @@
 import React from 'react';
 import { Route, Routes as RouterRoutes } from 'react-router-dom';
-import { Dashboard, Auth, Products, Users, Welcome, TaskManagerDashboard, Tasks, UserProfile, UserCalender, TaskDetails, AddProducts, ProductTable, AllJobs, CreateJob, ViewApplications, ViewProduct, JobDetails } from './pages/index';
+import { Dashboard, Auth, Users, Welcome, TaskManagerDashboard, Tasks, UserProfile, UserCalender, TaskDetails, AddProducts, ProductTable, AllJobs, CreateJob, ViewApplications, ViewProduct, JobDetails, DashboardAnalytics, GetWorkshopEnquiries } from './pages/index';
 import MainLayout from './layout/MainLayout';
 import TaskStatistics from './pages/TasksStaistics';
 const routes = [
   { path: '/', component: <Welcome />, exact: true },
   { path: '/dashboard', component: <Dashboard />, exact: true },
   { path: '/auth', component: <Auth />, exact: true },
-  { path: '/products', component: <MainLayout><Products /></MainLayout>, exact: true },
   { path: '/users', component: <MainLayout><Users /></MainLayout>, exact: true },
   { path: '/taskDashboard', component: <MainLayout><TaskManagerDashboard /></MainLayout>, exact: true },
   { path: '/tasks', component: <MainLayout><Tasks /></MainLayout>, exact: true },
@@ -23,6 +22,8 @@ const routes = [
   { path: '/hiring-form', component: <MainLayout><CreateJob/></MainLayout>, exact: true },
   { path: '/view-applications', component: <MainLayout><ViewApplications/></MainLayout>, exact: true },
   { path: '/job-details/:jobId', component: <MainLayout><JobDetails/></MainLayout>, exact: true },
+  { path: '/dashboard-analytics', component: <MainLayout><DashboardAnalytics/></MainLayout>, exact: true },
+  { path: '/workshop-enquiries', component: <MainLayout><GetWorkshopEnquiries/></MainLayout>, exact: true },
 ];
 
 const Routes: React.FC = () => {

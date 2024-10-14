@@ -10,12 +10,10 @@ const Sidebar = () => {
                     { href: "/users", label: "All Users" },
                 ]} />
                 <SidebarSection icon={<FaBox />} title="Products" items={[
-                    { href: "/products", label: "Dashboard" },
                     { href: "/product-table", label: "All Products" },
                     { href: "/add-products", label: "Add Product" },
                 ]} />
                 <SidebarSection icon={<FaChalkboardTeacher />} title="Workshops" items={[
-                    { href: "/workshop-dashboard", label: "Dashboard" },
                     { href: "/active-workshops", label: "Active Workshops" },
                     { href: "/workshop-enquiries", label: "Enquiries" },
                 ]} />

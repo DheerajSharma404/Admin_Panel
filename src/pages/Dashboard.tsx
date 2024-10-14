@@ -21,9 +21,9 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 h-screen">
       <div className="">
-      <div className="flex flex-col p-6 md:p-12 h-full">
+      <div className="flex flex-col p-6 md:p-12 ">
         <h1 className="text-3xl md:text-4xl font-bold text-left mb-6 text-gray-800">Mentoons Admin</h1>
         <div className="flex flex-col space-y-6">
           <div className="w-full flex justify-center relative">

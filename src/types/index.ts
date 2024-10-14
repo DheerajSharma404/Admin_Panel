@@ -125,3 +125,52 @@ export interface Pagination {
   totalPages: number;
   totalItems: number;
 }
+
+export interface DashboardDataResponse {
+  success: boolean;
+  message: string;
+  data: {
+    totalJobs: number;
+    totalUsers: number;
+    totalJobApplications: number;
+    totalProducts: number;
+    salesData: {
+      month: string;
+      sales: number;
+    }[];
+  };
+}
+
+
+
+export interface WorkshopEnquiry {
+  _id: string;
+  name: string;
+  age: string;
+  guardianName: string;
+  guardianContact: string;
+  guardianEmail?: string;
+  city: string;
+  mobileUsageLevel?: 'LOW' | 'MEDIUM' | 'HIGH';
+  mobileUsageHours?: number;
+  primaryActivityOnMobile?: string;
+  isTimeRestricted?: boolean;
+  restrictionType?: string;
+  concernsUser?: string;
+  behavioralChanges?: string;
+  physicalActivityHours?: number;
+  physicalActivityFrequency?: string;
+  confessionFrequency?: string;
+  message: string;
+  appliedWorkshop: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  isMobileAddicted?: boolean;
+}
+
+export interface WorkshopEnquiriesResponse {
+  success: boolean;
+  message: string;
+  data: WorkshopEnquiry[];
+}
