@@ -28,7 +28,7 @@ const CreateJob: React.FC = () => {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch('https://mentoons-backend-zlx3.onrender.com/api/v1/career/upload/file', {
+    const response = await fetch('https://mentoons-backend-zlx3.onrender.com/api/v1/upload/file', {
       method: 'POST',
       body: formData,
     });
