@@ -81,7 +81,7 @@ export interface JobApplication {
   gender: string;
   portfolioLink: string;
   coverNote: string;
-  resumeLink: string;
+  resume: string;
   coverLetterLink: string;
 }
 

@@ -1,8 +1,9 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useGetJobByIdQuery } from '../../features/career/careerApi';
 
 const JobDetails: React.FC = () => {
+  const navigate = useNavigate();
   const { jobId } = useParams<{ jobId: string }>();
   const { data: jobData, isLoading, isError } = useGetJobByIdQuery(jobId || '');
   const [showApplications, setShowApplications] = React.useState(false);
@@ -78,7 +79,7 @@ const JobDetails: React.FC = () => {
                 <p className="text-gray-700">{application.coverNote}</p>
                 <p className="mt-2 font-semibold">Cover Letter:</p>
                 <p className="text-gray-700">{application.coverLetterLink}</p>
-                <a href={application.resumeLink} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-blue-600 hover:underline">View Resume</a>
+                <a href={application.resume} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-blue-600 hover:underline">View Resume</a>
               </div>
             ))}
           </div>
@@ -88,12 +89,12 @@ const JobDetails: React.FC = () => {
       </div>
 
       <div className="flex justify-between">
-        <Link
-          to={`/edit-job/${jobId}`}
+        <button
+        onClick={() => navigate('/hiring-form', { state: { id: job._id } })}
           className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           Edit Job
-        </Link>
+        </button>
         <Link
           to="/all-jobs"
           className="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
