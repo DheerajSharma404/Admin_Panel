@@ -24,7 +24,7 @@ const JobDetails: React.FC = () => {
       <h1 className="text-3xl font-bold mb-6 text-gray-800">{job.jobTitle}</h1>
       
       <div className="mb-6">
-        <img src={job.thumbnail?.toString() ?? undefined} alt={job.jobTitle} className="w-full h-64 object-cover rounded-lg" />
+        <img src={job.thumbnail?.toString() ?? undefined} alt={job.jobTitle} className="w-full h-64 object-contain rounded-lg" />
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-6">

@@ -25,12 +25,12 @@ const DynamicTable = ({ data, onEdit, onDelete, onView,onSort,sortField,sortOrde
   };
 
   const renderProductContent = (key: string, value: any) => {
-    if (key === 'productThumbnail') {
+    if (key === 'productThumbnail' || key === 'thumbnail') {
       return (
         <img
           src={value}
           alt="Product Thumbnail"
-          className="w-full h-10 object-cover"
+          className="w-full h-10 object-contain"
         />
       );
     }
