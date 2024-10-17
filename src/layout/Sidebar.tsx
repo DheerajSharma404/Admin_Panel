@@ -1,10 +1,22 @@
 import { FaUsers, FaBox, FaChalkboardTeacher, FaBriefcase } from 'react-icons/fa';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
+    const navigate = useNavigate();
     return (
         <div className="bg-gray-100 shadow-xl rounded-r-3xl p-6 h-full flex flex-col">
-            <img src="/assets/logo.png" alt="logo" className="h-[10rem] w-[17rem]" />
+            <div className="mb-4">
+                <button
+                    onClick={() => navigate('/dashboard')}
+                    className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-200"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+                    </svg>
+                    Back to Dashboard
+                </button>
+            </div>
+            <img src="/assets/logo.png" alt="logo" className="h-[10rem] w-[17rem]" onClick={()=>{navigate('/dashboard-analytics')}}/>
             <nav className="flex-grow">
                 <SidebarSection icon={<FaUsers />} title="Users" items={[
                     { href: "/users", label: "All Users" },
