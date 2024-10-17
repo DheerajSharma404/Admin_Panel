@@ -5,9 +5,10 @@ const Sidebar = () => {
     const navigate = useNavigate();
     return (
         <div className="bg-gray-100 shadow-xl rounded-r-3xl p-6 h-full flex flex-col">
+            <img src="/assets/logo.png" alt="logo" className="h-[10rem] w-[17rem]" onClick={()=>{navigate('/dashboard')}}/>
             <div className="mb-4">
                 <button
-                    onClick={() => navigate('/dashboard')}
+                    onClick={() => navigate('/dashboard-analytics')}
                     className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-200"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -16,7 +17,6 @@ const Sidebar = () => {
                     Back to Dashboard
                 </button>
             </div>
-            <img src="/assets/logo.png" alt="logo" className="h-[10rem] w-[17rem]" onClick={()=>{navigate('/dashboard-analytics')}}/>
             <nav className="flex-grow">
                 <SidebarSection icon={<FaUsers />} title="Users" items={[
                     { href: "/users", label: "All Users" },
