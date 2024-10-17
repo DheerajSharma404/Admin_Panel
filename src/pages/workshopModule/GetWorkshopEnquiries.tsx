@@ -86,7 +86,7 @@ const GetWorkshopEnquiries = () => {
 
   const handleLimitChange = (newLimit: number) => {
     setLimit(newLimit);
-    setCurrentPage(1);
+    setCurrentPage(1);  
   };
 
   useEffect(() => {

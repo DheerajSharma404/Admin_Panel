@@ -4,17 +4,14 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { FaUsers, FaBriefcase, FaFileAlt, FaBox } from 'react-icons/fa';
 import StatCard from '../components/common/StatsCard';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../components/common/Loader';
 
 const DashboardAnalytics: React.FC = () => {
     const navigate = useNavigate();
     const {data,isLoading,} = useGetDashboardDataQuery();
 
     if (isLoading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
-            </div>
-        );
+        return <Loader/>;
     }
     return (
         <div className="h-full p-8">

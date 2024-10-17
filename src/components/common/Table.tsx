@@ -12,7 +12,7 @@ interface DynamicTableProps extends ITable {
   searchTerm: string;
 }
 
-const DynamicTable = ({ data, onEdit, onDelete, onView,onSort,sortField,sortOrder,searchTerm,handleSearch,}: DynamicTableProps) => {
+const DynamicTable = ({ data, onEdit, onDelete, onView, onSort, sortField, sortOrder, searchTerm, handleSearch }: DynamicTableProps) => {
  
 
   const tableData = Array.isArray(data) ? data : (Array.isArray((data as any)?.data) ? (data as any).data : []);
@@ -63,49 +63,51 @@ const DynamicTable = ({ data, onEdit, onDelete, onView,onSort,sortField,sortOrde
           placeholder="Search..."
           value={searchTerm}
           onChange={(e) => handleSearch(e)}
-          className="p-2 border rounded"
+          className="p-2 border rounded w-full"
         />
       </div>
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            {columnKeys.map((key, index) => (
-              <th
-                key={index}
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => onSort(key)}
-              >
-               <div className='flex items-center gap-2'>{key} {renderSortIcon(key)}</div>
-              </th>
-            ))}
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {tableData.map((row: any, rowIndex: number) => (
-            <tr key={rowIndex} className="hover:bg-gray-100">
-              {columnKeys
-                .filter(key => key !== '_id')
-                .map((key: string, colIndex: number) => (
-                  <td key={colIndex} className="px-6 py-4 whitespace-nowrap">
-                    {renderProductContent(key, row[key])}
-                  </td>
-                ))}
-              <td className="px-6 py-4 whitespace-nowrap flex items-center gap-2">
-                <button onClick={() => onView(row)} className="text-blue-600 hover:text-blue-900 flex items-center">
-                  <FaEye className="mr-1" /> View
-                </button>
-                <button onClick={() => onEdit(row)} className="text-yellow-600 hover:text-yellow-900 ml-2 flex items-center">
-                  <FaEdit className="mr-1" /> Edit
-                </button>
-                <button onClick={() => onDelete(row)} className="text-red-600 hover:text-red-900 ml-2 flex items-center">
-                  <FaTrash className="mr-1" /> Delete
-                </button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              {columnKeys.map((key, index) => (
+                <th
+                  key={index}
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  onClick={() => onSort(key)}
+                >
+                 <div className='flex items-center gap-2'>{key} {renderSortIcon(key)}</div>
+                </th>
+              ))}
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {tableData.map((row: any, rowIndex: number) => (
+              <tr key={rowIndex} className="hover:bg-gray-100">
+                {columnKeys
+                  .filter(key => key !== '_id')
+                  .map((key: string, colIndex: number) => (
+                    <td key={colIndex} className="px-6 py-4 whitespace-nowrap">
+                      {renderProductContent(key, row[key])}
+                    </td>
+                  ))}
+                <td className="px-6 py-4 whitespace-nowrap flex items-center gap-2">
+                  <button onClick={() => onView(row)} className="text-blue-600 hover:text-blue-900 flex items-center">
+                    <FaEye className="mr-1" /> View
+                  </button>
+                  <button onClick={() => onEdit(row)} className="text-yellow-600 hover:text-yellow-900 ml-2 flex items-center">
+                    <FaEdit className="mr-1" /> Edit
+                  </button>
+                  <button onClick={() => onDelete(row)} className="text-red-600 hover:text-red-900 ml-2 flex items-center">
+                    <FaTrash className="mr-1" /> Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {/* <div className="mt-4 flex justify-between items-center">
         <div>
           Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredAndSortedData.length)} of {filteredAndSortedData.length} entries
