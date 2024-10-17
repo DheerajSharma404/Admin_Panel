@@ -7,6 +7,7 @@ import DeleteConfirmationModal from "../../components/common/DeleteConfirmationM
 import debounce from 'lodash/debounce';
 import Pagination from "../../components/common/Pagination";
 import { headings } from "../../utils/constants";
+import Loader from "../../components/common/Loader";
 
 const ProductTable = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const ProductTable = () => {
   const [limit, setLimit] = useState<number>(10);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalProducts, setTotalProducts] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const editProduct = (row: any) => {
     navigate(`/add-products`, { state: { product: row } });
@@ -36,9 +38,10 @@ const ProductTable = () => {
         const response = await fetch(`https://mentoons-backend-zlx3.onrender.com/api/v1/products/${productToDelete._id}`, {
           method: 'DELETE',
         });
-        
+
         if (response.ok) {
           setProducts(prevProducts => prevProducts.filter(product => product._id !== productToDelete._id));
+          console.log(response, 'response')
           toast.success('Product deleted successfully');
         } else {
           const errorData = await response.json();
@@ -54,7 +57,7 @@ const ProductTable = () => {
   };
 
   const viewProduct = (row: Product) => {
-    console.log(row._id,'row')
+    console.log(row._id, 'row')
     navigate(`/products/${row._id}`);
   };
 
@@ -85,10 +88,11 @@ const ProductTable = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(`https://mentoons-backend-zlx3.onrender.com/api/v1/products?limit=${limit}&page=${currentPage}&sort=${sortOrder}&search=${debouncedSearchTerm}`);
         const result = await response.json();
-        console.log(result,'osoo')
+        console.log(result, 'osoo')
         if (result.success && Array.isArray(result.data.products)) {
           setProducts(result.data.products);
           setTotalPages(result.data.totalPages);
@@ -100,6 +104,8 @@ const ProductTable = () => {
       } catch (error) {
         console.error('Error fetching products:', error);
         setProducts([]);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchProducts();
@@ -112,26 +118,32 @@ const ProductTable = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-6">Products</h1>
-      <DynamicTable
-        headings={headings}
-        data={products}
-        onEdit={editProduct}
-        onDelete={removeProduct}
-        onView={viewProduct}
-        sortField="createdAt"
-        onSort={handleSort}
-        sortOrder={sortOrder}
-        searchTerm={searchTerm}
-        handleSearch={handleSearch}
-      />
-      <Pagination 
-        currentPage={currentPage} 
-        totalPages={totalPages} 
-        totalItems={totalProducts} 
-        limit={limit} 
-        onLimitChange={handleLimitChange}
-        onPageChange={handlePageChange}
-      />
+      {isLoading ? (
+        <Loader /> // Show loader while loading
+      ) : (
+        <>
+          <DynamicTable
+            headings={headings}
+            data={products}
+            onEdit={editProduct}
+            onDelete={removeProduct}
+            onView={viewProduct}
+            sortField="createdAt"
+            onSort={handleSort}
+            sortOrder={sortOrder}
+            searchTerm={searchTerm}
+            handleSearch={handleSearch}
+          />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalProducts}
+            limit={limit}
+            onLimitChange={handleLimitChange}
+            onPageChange={handlePageChange}
+          />
+        </>
+      )}
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}

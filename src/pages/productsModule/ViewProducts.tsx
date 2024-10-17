@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Product } from '../../types';
-import { toast } from 'react-toastify';
 import { FaArrowLeft } from 'react-icons/fa';
+import { errorToast } from '../../utils/toastResposnse';
+import Loader from '../../components/common/Loader';
 const ViewProduct: React.FC = () => {
   const { productId } = useParams<{ productId: string }>(); 
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const ViewProduct: React.FC = () => {
         setProduct(data.data);
       } catch (error) {
         console.error('Error fetching product:', error);
-        toast.error('Failed to load product details');
+       errorToast('Failed to load product details');
       } finally {
         setLoading(false);
       }
@@ -30,11 +31,7 @@ const ViewProduct: React.FC = () => {
     }, [productId]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
+    return <Loader />
   }
 
   if (!product) {
@@ -89,7 +86,7 @@ const ViewProduct: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <button
-        onClick={() => navigate('/products')}
+        onClick={() => navigate('/product-table')}
         className="mb-6 flex items-center text-blue-500 hover:text-blue-700 transition duration-300 ease-in-out"
       >
         <FaArrowLeft className="h-5 w-5 mr-2" />

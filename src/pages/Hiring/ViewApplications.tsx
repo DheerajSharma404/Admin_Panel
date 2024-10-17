@@ -4,6 +4,7 @@ import { useAppliedJobQuery } from '../../features/career/careerApi';
 import { JobApplication } from '../../types';
 import debounce from 'lodash/debounce';
 import Pagination from '../../components/common/Pagination';
+import Loader from '../../components/common/Loader';
 
 const ViewApplications = () => {
     const [sortOrder, setSortOrder] = useState<1 | -1>(-1);
@@ -61,9 +62,8 @@ console.log(data?.data?.jobs)
         setCurrentPage(1);
     }, [searchTerm]);
 
-    if (isLoading) return <div>Loading...</div>;
-    if (!data || !data.data) return <div>No data available</div>;
-
+    if (isLoading) return <Loader />;
+    if (!data || !data.data) return <div className='h-screen flex items-center justify-center'>No data available</div>;
     const { jobs, totalPages,totalJobs } = data?.data;
 
     return (

@@ -8,6 +8,7 @@ import Pagination from "../../components/common/Pagination";
 import DeleteConfirmationModal from "../../components/common/DeleteConfirmationModal";
 import { headings } from "../../utils/constants";
 import { WorkshopEnquiry } from "../../types";
+import Loader from "../../components/common/Loader";
 
 const GetWorkshopEnquiries = () => {
   const navigate = useNavigate();
@@ -93,7 +94,7 @@ const GetWorkshopEnquiries = () => {
   }, [debouncedSearchTerm]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
   return (
     <div className="p-4">

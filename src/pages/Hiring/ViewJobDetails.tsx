@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useGetJobByIdQuery } from '../../features/career/careerApi';
+import Loader from '../../components/common/Loader';
 
 const JobDetails: React.FC = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const JobDetails: React.FC = () => {
   const [showApplications, setShowApplications] = React.useState(false);
 
   if (isLoading) {
-    return <div className="text-center">Loading job details...</div>;
+    return <Loader />;
   }
 
   if (isError || !jobData) {

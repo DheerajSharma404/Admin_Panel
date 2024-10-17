@@ -99,11 +99,13 @@ export interface JobData {
 
 export interface JobDataResponse {
   success: boolean;
+  message?:string;
   data: {
     jobs: JobData[];
     currentPage: number;
     totalPages: number;
     totalJobs: number;
+    message?:string;
   };
 }
 export interface JobApplicationResponse {

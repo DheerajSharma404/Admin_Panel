@@ -5,8 +5,9 @@ import { JobData } from '../../types';
 import debounce from 'lodash/debounce';
 import Pagination from '../../components/common/Pagination';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import DeleteConfirmationModal from '../../components/common/DeleteConfirmationModal';
+import Loader from '../../components/common/Loader';
+import { errorToast, successToast } from '../../utils/toastResposnse';
 
 const AllJobs = () => {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ const AllJobs = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [jobToDelete, setJobToDelete] = useState<JobData | null>(null);
 
-    const { data, isLoading, isError, error, refetch } = useGetJobsQuery({
+    const { data, isLoading, isError, error } = useGetJobsQuery({
         sortOrder,
         searchTerm: debouncedSearchTerm,
         page: currentPage,
@@ -35,20 +36,17 @@ const AllJobs = () => {
     };
 
     const confirmDelete = async () => {
-        console.log(jobToDelete)
         if (jobToDelete) {
             try {
-                const result = await deleteJob(jobToDelete._id);
-                console.log(result)
-                if(!result){
-                    toast.error('Failed to delete job');
-                }else{
-                    toast.success('Job deleted successfully');
-                    refetch();
+                const result = await deleteJob(jobToDelete._id).unwrap();
+                if(result.success) {
+                    successToast(result.data.message || 'Job deleted successfully');
+                } else {
+                    errorToast(result.data.message || 'Failed to delete job');
                 }
             } catch (error) {
-                console.error('Error deleting job:', error);
-                toast.error('Failed to delete job');
+                console.log(error)
+                errorToast('Failed to delete job');
             }
         }
         setIsDeleteModalOpen(false);
@@ -82,16 +80,16 @@ const AllJobs = () => {
 
     const handleLimitChange = (newLimit: number) => {
         setLimit(newLimit);
-        setCurrentPage(1); 
+        setCurrentPage(1);
     };
 
     useEffect(() => {
         setCurrentPage(1);
     }, [searchTerm]);
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Loader />;
     if (isError) return <div>Error: {JSON.stringify(error)}</div>;
-    if (!data || !data.data || !data.data.jobs) return <div>No data available</div>;
+    if (!data || !data.data || !data.data.jobs) return <div className='h-screen flex items-center justify-center'>No data available</div>;
 
     const { jobs, totalPages, totalJobs } = data.data;
 
@@ -111,11 +109,11 @@ const AllJobs = () => {
                 handleSearch={handleSearch}
             />
             <div>
-                <Pagination 
-                    currentPage={currentPage} 
-                    totalPages={totalPages} 
-                    totalItems={totalJobs} 
-                    limit={limit} 
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalItems={totalJobs}
+                    limit={limit}
                     onLimitChange={handleLimitChange}
                     onPageChange={handlePageChange}
                 />

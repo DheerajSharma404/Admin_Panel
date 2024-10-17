@@ -4,6 +4,9 @@ import { Formik, Form, Field, ErrorMessage, FieldArray, FormikHelpers } from 'fo
 import * as Yup from 'yup';
 import { useCreateJobMutation, useGetJobByIdQuery, useUpdateJobMutation } from '../../features/career/careerApi';
 import { JobData } from '../../types';
+import Loader from '../../components/common/Loader';
+import { errorToast, successToast } from '../../utils/toastResposnse';
+import { useState } from 'react';
 
 interface JobFormValues {
   jobTitle: string;
@@ -41,7 +44,10 @@ const CreateJob: React.FC = () => {
     return data.data.imageUrl;
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleFormSubmit = async (values: JobFormValues, { setSubmitting }: FormikHelpers<JobFormValues>) => {
+    setIsSubmitting(true);
     try {
       let thumbnailUrl = values.thumbnail;
       if (values.thumbnail instanceof File) {
@@ -51,19 +57,24 @@ const CreateJob: React.FC = () => {
       const jobData = { ...values, thumbnail: thumbnailUrl };
 
       if (jobId) {
-        await updateJob({ ...jobData, _id: jobId }).unwrap();
+       const res = await updateJob({ ...jobData, _id: jobId }).unwrap();
+       successToast(res.message || 'Job updated successfully')
       } else {
-        await createJob(jobData as JobData).unwrap();
+        const res = await createJob(jobData as JobData).unwrap();
+        console.log(res,'res')
+        successToast(res.message || 'Job created successfully')
       }
       navigate('/all-jobs');
-    } catch (error) {
+    } catch (error:any) {
+      errorToast(error?.data?.message || 'Failed to create job')
       console.error('Error submitting job:', error);
     } finally {
       setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
-  if (isLoadingJob && jobId) return <div>Loading job data...</div>;
+  if (isLoadingJob && jobId) return<Loader />;
 
   const initialValues: JobFormValues = {
     jobTitle: jobData?.jobTitle || '',
@@ -95,7 +106,7 @@ const CreateJob: React.FC = () => {
         onSubmit={handleFormSubmit}
         enableReinitialize
       >
-        {({ values, setFieldValue }) => (
+        {({ values, setFieldValue, isValid, dirty }) => (
           <Form className="space-y-6">
             <FormField name="jobTitle" label="Job Title" />
             <FormField name="jobDescription" label="Job Description" as="textarea" rows={4} />
@@ -167,9 +178,20 @@ const CreateJob: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isSubmitting || !isValid || !dirty}
             >
-              {jobId ? 'Update Job' : 'Create Job'}
+              {isSubmitting ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  {jobId ? 'Updating...' : 'Creating...'}
+                </span>
+              ) : (
+                <>{jobId ? 'Update Job' : 'Create Job'}</>
+              )}
             </button>
           </Form>
         )}
