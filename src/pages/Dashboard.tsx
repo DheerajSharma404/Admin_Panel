@@ -4,6 +4,7 @@ import { getQuotes } from "../services/quoteService"
 import { IQuotes } from "../types"
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+
 const Dashboard = () => {
   const [quotes, setQuotes] = useState<IQuotes[]>([]);
   const [loading, setLoading] = useState(true);
