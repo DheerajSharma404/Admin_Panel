@@ -6,7 +6,7 @@ const LogIn = () => {
       <div className=" flex  items-center justify-center">
         <img src="/assets/logo.png" alt="Mentoons Logo" className="w-[30%]" />
       </div>
-      <SignIn signUpUrl="/sign-up" />
+      <SignIn signUpUrl="/sign-up" redirectUrl={"/dashboard"} />
     </div>
   );
 };
