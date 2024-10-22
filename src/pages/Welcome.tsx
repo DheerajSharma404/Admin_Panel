@@ -15,7 +15,9 @@ const Welcome = () => {
       </motion.h1>
       <motion.button
         className="bg-blue-500 text-white px-4 py-2 rounded-md"
+
         onClick={() => navigate("/sign-in")}
+
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
