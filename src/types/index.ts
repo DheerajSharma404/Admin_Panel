@@ -176,3 +176,12 @@ export interface WorkshopEnquiriesResponse {
   message: string;
   data: WorkshopEnquiry[];
 }
+export interface User {
+  _id: string;
+  clerkId: string;
+  role: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  picture: string;
+}

@@ -25,7 +25,7 @@ const DynamicTable = ({ data, onEdit, onDelete, onView, onSort, sortField, sortO
   };
 
   const renderProductContent = (key: string, value: any) => {
-    if (key === 'productThumbnail' || key === 'thumbnail') {
+    if (key === 'productThumbnail' || key === 'thumbnail' || key === 'picture') {
       return (
         <img
           src={value}
@@ -108,27 +108,6 @@ const DynamicTable = ({ data, onEdit, onDelete, onView, onSort, sortField, sortO
           </tbody>
         </table>
       </div>
-      {/* <div className="mt-4 flex justify-between items-center">
-        <div>
-          Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredAndSortedData.length)} of {filteredAndSortedData.length} entries
-        </div>
-        <div>
-          <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className="px-4 py-2 border rounded mr-2"
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, pageCount))}
-            disabled={currentPage === pageCount}
-            className="px-4 py-2 border rounded"
-          >
-            Next
-          </button>
-        </div>
-      </div> */}
     </div>
   );
 };
