@@ -19,6 +19,8 @@ import ProductTable from "./productsModule/ProductTable";
 import ViewProduct from "./productsModule/ViewProducts";
 import GetWorkshopEnquiries from "./workshopModule/GetWorkshopEnquiries";
 import ViewUser from "./userModule/ViewUser";
+import ViewEnquiry from "./workshopModule/ViewEnquiry";
+import AssesmentForm from "./workshopModule/AssesmentForm";
 export {
   AddProducts,
   AllJobs,
@@ -41,4 +43,6 @@ export {
   ViewProduct,
   Welcome,
   ViewUser,
+  ViewEnquiry,
+  AssesmentForm,
 };

@@ -5,6 +5,7 @@ import MainLayout from "./layout/MainLayout";
 import {
   AddProducts,
   AllJobs,
+  AssesmentForm,
   CreateJob,
   Dashboard,
   DashboardAnalytics,
@@ -20,6 +21,7 @@ import {
   UserProfile,
   Users,
   ViewApplications,
+  ViewEnquiry,
   ViewProduct,
   ViewUser,
   Welcome,
@@ -210,6 +212,24 @@ const routes = [
         <ProtectedRoutes>
           <ViewUser />
         </ProtectedRoutes>
+      </MainLayout>
+    ),
+    exact: true,
+  },
+  {
+    path: "/enquiries/:enquiryId",
+    component: (
+      <MainLayout>
+        <ViewEnquiry />
+      </MainLayout>
+    ),
+    exact: true,
+  },
+  {
+    path: "/assesment-form",
+    component: (
+      <MainLayout>
+        <AssesmentForm />
       </MainLayout>
     ),
     exact: true,

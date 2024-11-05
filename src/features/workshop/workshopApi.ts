@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { WorkshopEnquiriesResponse } from "../../types";
+import { SingleWorkshopEnquiryResponse, WorkshopEnquiriesListResponse } from "../../types";
 
 
 export const workshopApiSlice = createApi({
@@ -8,9 +8,9 @@ export const workshopApiSlice = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'https://mentoons-backend-zlx3.onrender.com/api/v1' }),
     tagTypes: ['Dashboard'],
     endpoints: (builder) => ({
-        getEnquiriess: builder.query<WorkshopEnquiriesResponse, {sort:string}>({
-            query: ({sort}) => ({
-                url: `/workshop?sort=${sort}`,
+        getEnquiriess: builder.query<WorkshopEnquiriesListResponse, {sort:string,page:number,limit:number}>({
+            query: ({sort,page,limit}) => ({
+                url: `/workshop?sort=${sort}&page=${page}&limit=${limit}`,
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -18,8 +18,17 @@ export const workshopApiSlice = createApi({
                 }
             }),
             providesTags: ['Dashboard']
+        }),
+        getEnquiryById: builder.query<SingleWorkshopEnquiryResponse, {enquiryId:string | undefined}>({
+            query: ({enquiryId}) => ({
+                url: `/workshop/${enquiryId}`,
+                method: 'GET',
+            })
         })
     }),
 });
 
-export const { useGetEnquiriessQuery } = workshopApiSlice;
+
+
+
+export const { useGetEnquiriessQuery,useGetEnquiryByIdQuery } = workshopApiSlice;
