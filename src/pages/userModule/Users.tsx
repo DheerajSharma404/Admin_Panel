@@ -27,7 +27,6 @@ const Users = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const editUser = (row: any) => {
-    // Implement edit functionality
     console.log("Edit user:", row);
   };
 

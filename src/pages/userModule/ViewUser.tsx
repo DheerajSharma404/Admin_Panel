@@ -19,7 +19,7 @@ const ViewUser: React.FC = () => {
         const fetchUser = async () => {
             try {
                 const token = await getToken();
-                const response = await axios.get(`https://mentoons-backend-zlx3.onrender.com/api/v1/user/user/${userId}`, {
+                const response = await axios.get(`http://localhost:4000/api/v1/user/user/${userId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setUser(response.data.data);

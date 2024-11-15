@@ -21,6 +21,7 @@ import GetWorkshopEnquiries from "./workshopModule/GetWorkshopEnquiries";
 import ViewUser from "./userModule/ViewUser";
 import ViewEnquiry from "./workshopModule/ViewEnquiry";
 import AssesmentForm from "./workshopModule/AssesmentForm";
+import CallRequest from "./workshopModule/CallRequest";
 export {
   AddProducts,
   AllJobs,
@@ -45,4 +46,5 @@ export {
   ViewUser,
   ViewEnquiry,
   AssesmentForm,
+  CallRequest
 };

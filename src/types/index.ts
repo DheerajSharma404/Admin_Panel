@@ -99,28 +99,28 @@ export interface JobData {
 
 export interface JobDataResponse {
   success: boolean;
-  message?:string;
+  message?: string;
   data: {
     jobs: JobData[];
     currentPage: number;
     totalPages: number;
     totalJobs: number;
-    message?:string;
+    message?: string;
   };
 }
 export interface JobApplicationResponse {
   success: boolean;
-  data:{
-    jobs:JobApplication[],
-    currentPage:number,
-    totalPages:number,
-    totalJobs:number
+  data: {
+    jobs: JobApplication[],
+    currentPage: number,
+    totalPages: number,
+    totalJobs: number
   }
 }
 export interface singleJobDataResponse {
   success: boolean;
-  data:  JobData;
-} 
+  data: JobData;
+}
 
 export interface Pagination {
   currentPage: number;
@@ -182,4 +182,34 @@ export interface User {
   email: string;
   phoneNumber: string;
   picture: string;
+}
+export interface CallRequestsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    callRequestData: CallRequest[];
+    currentPage: number;
+    totalPages: number;
+    totalCallRequests: number;
+  }
+}
+export type CallRequest = {
+  _id: string;
+  name: string;
+  phone: string;
+  status: string;
+  assignedTo?: User[];
+}
+
+export interface AdminUser {
+  _id: string;
+  name: string;
+}
+export interface StatusConfig {
+  [key: string]: {
+    bg: string;
+    text: string;
+    border: string;
+    label: string;
+  };
 }

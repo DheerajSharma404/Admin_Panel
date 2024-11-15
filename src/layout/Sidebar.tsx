@@ -29,6 +29,7 @@ const Sidebar = () => {
                     { href: "/active-workshops", label: "Active Workshops" },
                     { href: "/workshop-enquiries", label: "Enquiries" },
                     { href: "/assesment-form", label: "Assessment Form" },
+                    { href: "/call-request", label: "Call Requests" },
                 ]} />
                 <SidebarSection icon={<FaBriefcase />} title="Career Corner" items={[
                     { href: "/all-jobs", label: "All Jobs" },

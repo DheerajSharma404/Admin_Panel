@@ -6,6 +6,7 @@ import {
   AddProducts,
   AllJobs,
   AssesmentForm,
+  CallRequest,
   CreateJob,
   Dashboard,
   DashboardAnalytics,
@@ -230,6 +231,15 @@ const routes = [
     component: (
       <MainLayout>
         <AssesmentForm />
+      </MainLayout>
+    ),
+    exact: true,
+  },
+  {
+    path: "/call-request",
+    component: (
+      <MainLayout>
+        <CallRequest />
       </MainLayout>
     ),
     exact: true,
