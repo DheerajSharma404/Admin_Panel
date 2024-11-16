@@ -25,14 +25,15 @@ const GetWorkshopEnquiries = () => {
 
   const { data, isLoading, isSuccess } = useGetEnquiriessQuery({
     sort: sortOrder,
+    page: currentPage,
+    limit: limit,
   });
-
+  console.log(data,'llkk');
   useEffect(() => {
     if (isSuccess && data?.data) {
-      setEnquiries(data.data);
-      const calculatedTotalPages = Math.ceil(data.data.length / limit);
-      setTotalPages(calculatedTotalPages);
-      setTotalEnquiries(data.data.length);
+      setEnquiries(data.data.enquiryData);
+      setTotalPages(data.data.totalPages);
+      setTotalEnquiries(data.data.totalEnquiries);
     }
   }, [isSuccess, data]);
 

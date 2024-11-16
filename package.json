@@ -12,10 +12,13 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.11.1",
     "@reduxjs/toolkit": "^2.2.8",
+    "@types/antd": "^0.12.32",
     "@types/moment": "^2.11.29",
     "@types/react-big-calendar": "^1.8.12",
+    "antd": "^5.22.0",
     "axios": "^1.7.7",
     "classnames": "^2.5.1",
+    "date-fns": "^4.1.0",
     "formik": "^2.4.6",
     "framer-motion": "^11.11.1",
     "lodash": "^4.17.21",

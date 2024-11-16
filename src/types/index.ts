@@ -99,28 +99,28 @@ export interface JobData {
 
 export interface JobDataResponse {
   success: boolean;
-  message?:string;
+  message?: string;
   data: {
     jobs: JobData[];
     currentPage: number;
     totalPages: number;
     totalJobs: number;
-    message?:string;
+    message?: string;
   };
 }
 export interface JobApplicationResponse {
   success: boolean;
-  data:{
-    jobs:JobApplication[],
-    currentPage:number,
-    totalPages:number,
-    totalJobs:number
+  data: {
+    jobs: JobApplication[],
+    currentPage: number,
+    totalPages: number,
+    totalJobs: number
   }
 }
 export interface singleJobDataResponse {
   success: boolean;
-  data:  JobData;
-} 
+  data: JobData;
+}
 
 export interface Pagination {
   currentPage: number;
@@ -153,26 +153,63 @@ export interface WorkshopEnquiry {
   guardianContact: string;
   guardianEmail?: string;
   city: string;
-  mobileUsageLevel?: 'LOW' | 'MEDIUM' | 'HIGH';
-  mobileUsageHours?: number;
-  primaryActivityOnMobile?: string;
-  isTimeRestricted?: boolean;
-  restrictionType?: string;
-  concernsUser?: string;
-  behavioralChanges?: string;
-  physicalActivityHours?: number;
-  physicalActivityFrequency?: string;
-  confessionFrequency?: string;
-  message: string;
-  appliedWorkshop: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-  isMobileAddicted?: boolean;
+  duration: string;
+  workshop: string;
 }
 
-export interface WorkshopEnquiriesResponse {
+export interface WorkshopEnquiriesListResponse {
   success: boolean;
   message: string;
-  data: WorkshopEnquiry[];
+  data: {
+    enquiryData: WorkshopEnquiry[];
+    currentPage: number;
+    totalPages: number;
+    totalEnquiries: number;
+  };
+}
+
+export interface SingleWorkshopEnquiryResponse {
+  success: boolean;
+  message: string;
+  data: WorkshopEnquiry;
+}
+
+export interface User {
+  _id: string;
+  clerkId: string;
+  role: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  picture: string;
+}
+export interface CallRequestsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    callRequestData: CallRequest[];
+    currentPage: number;
+    totalPages: number;
+    totalCallRequests: number;
+  }
+}
+export type CallRequest = {
+  _id: string;
+  name: string;
+  phone: string;
+  status: string;
+  assignedTo?: User[];
+}
+
+export interface AdminUser {
+  _id: string;
+  name: string;
+}
+export interface StatusConfig {
+  [key: string]: {
+    bg: string;
+    text: string;
+    border: string;
+    label: string;
+  };
 }

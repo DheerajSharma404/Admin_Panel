@@ -12,12 +12,16 @@ import TaskDetails from "./TaskDetails";
 import Tasks from "./Tasks";
 import UserCalender from "./UserCalender";
 import UserProfile from "./UserProfile";
-import Users from "./Users";
+import Users from "./userModule/Users";
 import Welcome from "./Welcome";
 import AddProducts from "./productsModule/AddProducts";
 import ProductTable from "./productsModule/ProductTable";
 import ViewProduct from "./productsModule/ViewProducts";
 import GetWorkshopEnquiries from "./workshopModule/GetWorkshopEnquiries";
+import ViewUser from "./userModule/ViewUser";
+import ViewEnquiry from "./workshopModule/ViewEnquiry";
+import AssesmentForm from "./workshopModule/AssesmentForm";
+import CallRequest from "./workshopModule/CallRequest";
 export {
   AddProducts,
   AllJobs,
@@ -39,4 +43,8 @@ export {
   ViewApplications,
   ViewProduct,
   Welcome,
+  ViewUser,
+  ViewEnquiry,
+  AssesmentForm,
+  CallRequest
 };
