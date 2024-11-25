@@ -1,397 +1,327 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
+import { useAddFeedbackMutation } from "../../features/workshop/workshopApi";
 
-interface FormValues {
-  name: string;
-  guardianName: string;
-  guardianContact: string;
-  age: string;
-  message: string;
-  city: string;
-  appliedWorkshop: string;
-  guardianEmail: string;
-  mobileUsageLevel: string;
-  mobileUsageHours: number;
-  primaryActivityOnMobile: string;
-  isTimeRestricted: boolean;
-  restrictionType: string;
-  concernsUser: string;
-  behavioralChanges: string;
-  physicalActivityHours: number;
-  physicalActivityFrequency: string;
-  confessionFrequency: string;
+export interface FeedbackFormValues {
+  childName: string;
+  childAge: string;
+  parentNames: {
+    mother: string;
+    father: string;
+    carer?: string;
+  };
+  easeOfUseRating: number;
+  learnings: string;
+  favoriteFeature: 'speak-easy' | 'silent-stories-and-contest' | 'menu-mania' | 'all-of-the-above';
+  issues: string;
+  monitoringEaseRating: number;
+  wouldRecommend: boolean;
+  recommendationReason: string;
+  overallExperience: 'negative' | 'neutral' | 'positive';
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
+  childName: Yup.string()
     .required('Child\'s name is required')
     .min(2, 'Name must be at least 2 characters'),
-  guardianName: Yup.string()
-    .required('Guardian\'s name is required')
-    .min(2, 'Name must be at least 2 characters'),
-  guardianContact: Yup.string()
-    .required('Guardian\'s contact is required')
-    .matches(/^[0-9]+$/, 'Must be only digits')
-    .min(10, 'Must be exactly 10 digits')
-    .max(10, 'Must be exactly 10 digits'),
-  age: Yup.number()
-    .required('Age is required')
-    .min(5, 'Age must be at least 5')
-    .max(18, 'Age must not exceed 18'),
-  city: Yup.string()
-    .required('City is required'),
-  guardianEmail: Yup.string()
-    .required('Guardian\'s email is required')
-    .email('Invalid email format'),
- mobileUsageLevel: Yup.string()
-    .required('Mobile usage level is required'),
-  mobileUsageHours: Yup.number()
-    .required('Mobile usage hours is required')
-    .min(0, 'Hours cannot be negative')
-    .max(24, 'Hours cannot exceed 24'),
-  primaryActivityOnMobile: Yup.string()
-    .required('Primary activity is required'),
-  restrictionType: Yup.string()
-    .when('isTimeRestricted', {
-      is: true,
-      then: () => Yup.string().required('Restriction type is required'),
-    }),
-  physicalActivityHours: Yup.number()
-    .required('Physical activity hours is required')
-    .min(0, 'Hours cannot be negative'),
-  physicalActivityFrequency: Yup.string()
-    .required('Physical activity frequency is required'),
-  confessionFrequency: Yup.string()
-    .required('Confession frequency is required'),
-  concernsUser: Yup.string()
-    .required('User concerns is required'),
-  behavioralChanges: Yup.string()
-    .required('Behavioral changes is required'),
-  message: Yup.string()
-    .min(10, 'Message must be at least 10 characters')
-    .max(500, 'Message must not exceed 500 characters'),
-  duration: Yup.string()
-    .required('Duration is required'),
+  childAge: Yup.string()
+    .required('Child\'s age is required'),
+  parentNames: Yup.object().shape({
+    mother: Yup.string().required('Mother\'s name is required'),
+    father: Yup.string().required('Father\'s name is required'),
+    carer: Yup.string(),
+  }),
+  easeOfUseRating: Yup.number()
+    .required('Ease of use rating is required')
+    .min(1, 'Rating must be between 1 and 5')
+    .max(5, 'Rating must be between 1 and 5'),
+  learnings: Yup.string()
+    .required('Learnings are required'),
+  favoriteFeature: Yup.string()
+    .required('Favorite feature is required')
+    .oneOf(['speak-easy', 'silent-stories-and-contest', 'menu-mania', 'all-of-the-above']),
+  issues: Yup.string()
+    .required('Issues description is required'),
+  monitoringEaseRating: Yup.number()
+    .required('Monitoring ease rating is required')
+    .min(1, 'Rating must be between 1 and 5')
+    .max(5, 'Rating must be between 1 and 5'),
+  wouldRecommend: Yup.boolean()
+    .required('Would recommend field is required'),
+  recommendationReason: Yup.string()
+    .required('Recommendation reason is required'),
+  overallExperience: Yup.string()
+    .required('Overall experience is required')
+    .oneOf(['negative', 'neutral', 'positive']),
 });
 
 const AssesmentForm: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-
-  const nextStep = () => setCurrentStep(2);
-  const prevStep = () => setCurrentStep(1);
+  const totalSteps = 3;
+  const [addFeedback] = useAddFeedbackMutation();
+  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, totalSteps));
+  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
 
   const getStepTitle = (step: number) => {
     switch (step) {
       case 1:
-        return "Child & Guardian Details";
+        return "Basic Information";
       case 2:
-        return "Issues & Activities Assessment";
+        return "Rating & Preferences";
+      case 3:
+        return "Detailed Feedback";
       default:
         return "";
     }
   };
 
-  const initialValues: FormValues = {
-    name: "",
-    guardianName: "",
-    guardianContact: "",
-    age: "",
-    message: "",
-    city: "",
-    appliedWorkshop: "",
-    guardianEmail: "",
-    mobileUsageLevel: "",
-    mobileUsageHours: 0,
-    primaryActivityOnMobile: "",
-    isTimeRestricted: false,
-    restrictionType: "",
-    concernsUser: "",
-    behavioralChanges: "",
-    physicalActivityHours: 0,
-    physicalActivityFrequency: "",
-    confessionFrequency: "",
+  const initialValues: FeedbackFormValues = {
+    childName: "",
+    childAge: "",
+    parentNames: {
+      mother: "",
+      father: "",
+      carer: "",
+    },
+    easeOfUseRating: 1,
+    learnings: "",
+    favoriteFeature: "speak-easy",
+    issues: "",
+    monitoringEaseRating: 1,
+    wouldRecommend: false,
+    recommendationReason: "",
+    overallExperience: "neutral",
   }
 
   const renderFormStep = () => {
     switch (currentStep) {
       case 1:
         return (
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-            <div>
-              <label htmlFor='name' className='block text-sm font-medium text-gray-700 mb-1'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+            <div className="form-group">
+              <label htmlFor='childName' className="block text-sm font-medium text-gray-700 mb-1">
                 Child's Name
               </label>
               <Field
-                id='name'
-                name='name'
+                name='childName'
                 type='text'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
               />
-              <ErrorMessage name='name' component='div' className='text-red-500 text-sm mt-1' />
+              <ErrorMessage name='childName' component="div" className="mt-1 text-sm text-red-600" />
             </div>
-            <div>
-              <label htmlFor='guardianName' className='block text-sm font-medium text-gray-700 mb-1'>
-                Guardian's/Parent's Name
-              </label>
-              <Field
-                id='guardianName'
-                name='guardianName'
-                type='text'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
-              />
-              <ErrorMessage name='guardianName' component='div' className='text-red-500 text-sm mt-1' />
-            </div>
-            <div>
-              <label htmlFor='guardianContact' className='block text-sm font-medium text-gray-700 mb-1'>
-                Guardian's/Parent's Contact
-              </label>
-              <Field
-                id='guardianContact'
-                name='guardianContact'
-                type='text'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
-              />
-              <ErrorMessage name='guardianContact' component='div' className='text-red-500 text-sm mt-1' />
-            </div>
-            <div>
-              <label htmlFor='age' className='block text-sm font-medium text-gray-700 mb-1'>
+
+            <div className="form-group">
+              <label htmlFor='childAge' className="block text-sm font-medium text-gray-700 mb-1">
                 Child's Age
               </label>
               <Field
-                id='age'
-                name='age'
+                name='childAge'
                 type='text'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
               />
-              <ErrorMessage name='age' component='div' className='text-red-500 text-sm mt-1' />
+              <ErrorMessage name='childAge' component="div" className="mt-1 text-sm text-red-600" />
             </div>
-            <div>
-              <label htmlFor='city' className='block text-sm font-medium text-gray-700 mb-1'>
-                City
+
+            <div className="form-group">
+              <label htmlFor='parentNames.mother' className="block text-sm font-medium text-gray-700 mb-1">
+                Mother's Name
               </label>
               <Field
-                id='city'
-                name='city'
+                name='parentNames.mother'
                 type='text'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
               />
-              <ErrorMessage name='city' component='div' className='text-red-500 text-sm mt-1' />
+              <ErrorMessage name='parentNames.mother' component="div" className="mt-1 text-sm text-red-600" />
             </div>
-            <div>
-              <label htmlFor='guardianEmail' className='block text-sm font-medium text-gray-700 mb-1'>
-                Guardian's Email
+
+            <div className="form-group">
+              <label htmlFor='parentNames.father' className="block text-sm font-medium text-gray-700 mb-1">
+                Father's Name
               </label>
               <Field
-                id='guardianEmail'
-                name='guardianEmail'
-                type='email'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
+                name='parentNames.father'
+                type='text'
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
               />
-              <ErrorMessage name='guardianEmail' component='div' className='text-red-500 text-sm mt-1' />
+              <ErrorMessage name='parentNames.father' component="div" className="mt-1 text-sm text-red-600" />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor='parentNames.carer' className="block text-sm font-medium text-gray-700 mb-1">
+                Carer's Name (Optional)
+              </label>
+              <Field
+                name='parentNames.carer'
+                type='text'
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              <ErrorMessage name='parentNames.carer' component="div" className="mt-1 text-sm text-red-600" />
             </div>
           </div>
         );
       case 2:
         return (
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-           <div>
-              <label htmlFor='mobileUsageLevel' className='block text-sm font-medium text-gray-700 mb-1'>
-                Mobile Usage Level
-              </label>
-              <Field
-                as='select'
-                id='mobileUsageLevel'
-                name='mobileUsageLevel'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
-              >
-                <option value=''>Select usage level</option>
-                <option value='LOW'>Low</option>
-                <option value='MEDIUM'>Medium</option>
-                <option value='HIGH'>High</option>
-              </Field>
-              <ErrorMessage name='mobileUsageLevel' component='div' className='text-red-500 text-sm mt-1' />
+          <div className='space-y-8'>
+            {/* Rating Section - Small inputs */}
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+              <div className="form-group">
+                <label htmlFor='easeOfUseRating' className="block text-sm font-medium text-gray-700 mb-1">
+                  Ease of Use Rating
+                </label>
+                <div className="flex items-center space-x-2">
+                  <Field
+                    name='easeOfUseRating'
+                    type='number'
+                    min='1'
+                    max='5'
+                    className="w-24 px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                  />
+                  <span className="text-sm text-gray-500">(1-5)</span>
+                </div>
+                <ErrorMessage name='easeOfUseRating' component="div" className="mt-1 text-sm text-red-600" />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor='monitoringEaseRating' className="block text-sm font-medium text-gray-700 mb-1">
+                  Monitoring Ease Rating
+                </label>
+                <div className="flex items-center space-x-2">
+                  <Field
+                    name='monitoringEaseRating'
+                    type='number'
+                    min='1'
+                    max='5'
+                    className="w-24 px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                  />
+                  <span className="text-sm text-gray-500">(1-5)</span>
+                </div>
+                <ErrorMessage name='monitoringEaseRating' component="div" className="mt-1 text-sm text-red-600" />
+              </div>
             </div>
-            <div>
-              <label htmlFor='mobileUsageHours' className='block text-sm font-medium text-gray-700 mb-1'>
-                Mobile Usage Hours (per day)
-              </label>
-              <Field
-                id='mobileUsageHours'
-                name='mobileUsageHours'
-                type='number'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
-              />
-              <ErrorMessage name='mobileUsageHours' component='div' className='text-red-500 text-sm mt-1' />
+
+            {/* Dropdown Section */}
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+              <div className="form-group">
+                <label htmlFor='favoriteFeature' className="block text-sm font-medium text-gray-700 mb-1">
+                  Favorite Feature
+                </label>
+                <Field
+                  as='select'
+                  name='favoriteFeature'
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 bg-white"
+                >
+                  <option value='speak-easy'>Speak Easy</option>
+                  <option value='silent-stories-and-contest'>Silent Stories and Contest</option>
+                  <option value='menu-mania'>Menu Mania</option>
+                  <option value='all-of-the-above'>All of the Above</option>
+                </Field>
+                <ErrorMessage name='favoriteFeature' component="div" className="mt-1 text-sm text-red-600" />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor='overallExperience' className="block text-sm font-medium text-gray-700 mb-1">
+                  Overall Experience
+                </label>
+                <Field
+                  as='select'
+                  name='overallExperience'
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 bg-white"
+                >
+                  <option value='negative'>Negative</option>
+                  <option value='neutral'>Neutral</option>
+                  <option value='positive'>Positive</option>
+                </Field>
+                <ErrorMessage name='overallExperience' component="div" className="mt-1 text-sm text-red-600" />
+              </div>
             </div>
-            <div>
-              <label htmlFor='primaryActivityOnMobile' className='block text-sm font-medium text-gray-700 mb-1'>
-                Primary Activity on Mobile
-              </label>
-              <Field
-                as='select'
-                id='primaryActivityOnMobile'
-                name='primaryActivityOnMobile'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
-              >
-                <option value=''>Select primary activity</option>
-                <option value='WATCHING_VIDEOS'>Watching Videos</option>
-                <option value='PLAYING_GAMES'>Playing Games</option>
-                <option value='CHATTING'>Chatting</option>
-                <option value='OTHERS'>Others</option>
-              </Field>
-              <ErrorMessage name='primaryActivityOnMobile' component='div' className='text-red-500 text-sm mt-1' />
+
+            {/* Recommendation Section */}
+            <div className="form-group p-4 bg-gray-50 rounded-lg">
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Would You Recommend this Program?
+                </label>
+                <div className="flex items-center space-x-2">
+                  <Field
+                    name='wouldRecommend'
+                    type='checkbox'
+                    className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  />
+                  <span className="text-sm text-gray-600">Yes, I would recommend this program</span>
+                </div>
+                <ErrorMessage name='wouldRecommend' component="div" className="mt-1 text-sm text-red-600" />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor='recommendationReason' className="block text-sm font-medium text-gray-700 mb-1">
+                  What did yopu like the most?
+                </label>
+                <Field
+                  as='textarea'
+                  name='recommendationReason'
+                  rows='3'
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Please share yor experience..."
+                />
+                <ErrorMessage name='recommendationReason' component="div" className="mt-1 text-sm text-red-600" />
+              </div>
             </div>
-            <div className='flex items-center'>
-              <Field
-                id='isTimeRestricted'
-                name='isTimeRestricted'
-                type='checkbox'
-                className='h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded'
-              />
-              <label htmlFor='isTimeRestricted' className='ml-2 block text-sm text-gray-900'>
-                Is Time Restricted?
-              </label>
-            </div>
-            <div>
-              <label htmlFor='restrictionType' className='block text-sm font-medium text-gray-700 mb-1'>
-                Restriction Type
-              </label>
-              <Field
-                as='select'
-                id='restrictionType'
-                name='restrictionType'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
-              >
-                <option value=''>Select restriction type</option>
-                <option value='TIME_LIMIT'>Time Limit</option>
-                <option value='SPECIFIC TIME'>Specific Time</option>
-                <option value='TYPE_OF_ACTIVITY'>Type of Activity</option>
-                <option value='OTHERS'>Others</option>
-              </Field>
-              <ErrorMessage name='restrictionType' component='div' className='text-red-500 text-sm mt-1' />
-            </div>
-            <div>
-              <label htmlFor='physicalActivityHours' className='block text-sm font-medium text-gray-700 mb-1'>
-                Physical Activity Hours (per week)
-              </label>
-              <Field  
-                id='physicalActivityHours'
-                name='physicalActivityHours'
-                type='number'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
-              />
-              <ErrorMessage name='physicalActivityHours' component='div' className='text-red-500 text-sm mt-1' />
-            </div>
-            <div>
-              <label htmlFor='physicalActivityFrequency' className='block text-sm font-medium text-gray-700 mb-1'>
-                Physical Activity Frequency
-              </label>
-              <Field
-                as='select'
-                id='physicalActivityFrequency'
-                name='physicalActivityFrequency'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
-              >
-                <option value=''>Select frequency</option>
-                <option value='LOW'>Low</option>
-                <option value='MEDIUM'>Medium</option>
-                <option value='HIGH'>High</option>
-              </Field>
-              <ErrorMessage name='physicalActivityFrequency' component='div' className='text-red-500 text-sm mt-1' />
-            </div>
-            <div>
-              <label htmlFor='confessionFrequency' className='block text-sm font-medium text-gray-700 mb-1'>
-                Confession Frequency
-              </label>
-              <Field
-                as='select'
-                id='confessionFrequency'
-                name='confessionFrequency'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
-              >
-                <option value=''>Select frequency</option>
-                <option value='FREQUENTLY'>Frequently</option>
-                <option value='OCCASIONALLY'>Occasionally</option>
-                <option value='RARELY'>Rarely</option>
-              </Field>
-              <ErrorMessage name='confessionFrequency' component='div' className='text-red-500 text-sm mt-1' />
-            </div>
-            <div>
-              <label htmlFor='concernsUser' className='block text-sm font-medium text-gray-700 mb-1'>
-                User Concerns
-              </label>
-              <Field
-                as='select'
-                id='concernsUser'
-                name='concernsUser'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
-              >
-                <option value=''>Select user concern</option>
-                <option value='EXCESSIVE_SCREEN_TIME'>Excessive Screen Time</option>
-                <option value='IMPACT_ON_SOCIAL_SKILLS'>Impact on Social Skills</option>
-                <option value='LACK_OF_PHYSICAL_ACTIVITY'>Lack of Physical Activity</option>
-                <option value='OTHERS'>Others</option>
-              </Field>
-              <ErrorMessage name='concernsUser' component='div' className='text-red-500 text-sm mt-1' />
-            </div>
-            <div>
-              <label htmlFor='behavioralChanges' className='block text-sm font-medium text-gray-700 mb-1'>
-                Behavioral Changes
-              </label>
-              <Field
-                as='select'
-                id='behavioralChanges'
-                name='behavioralChanges'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
-              >
-                <option value=''>Select behavioral change</option>
-                <option value='CONCENTRATION'>Concentration</option>
-                <option value='IRRITABILITY'>Irritability</option>
-                <option value='SLEEPING'>Sleeping</option>
-                <option value='LESS_INTEREST'>Less Interest</option>
-                <option value='OTHERS'>Others</option>
-              </Field>
-              <ErrorMessage name='behavioralChanges' component='div' className='text-red-500 text-sm mt-1' />
-            </div>
-            <div>
-              <label htmlFor='duration' className='block text-sm font-medium text-gray-700 mb-1'>
-                Duration
-              </label>
-              <Field
-                as='select'
-                id='duration'
-                name='duration'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition'
-              >
-                <option value=''>Select duration</option>
-                <option value='2days'>2 days</option>
-                <option value='6months'>6 months</option>
-                <option value='12months'>12 months</option>
-              </Field>
-            </div>
-            <div>
-              <label htmlFor='message' className='block text-sm font-medium text-gray-700 mb-1'>
-                Message
-              </label>
-              <Field
-                as='textarea'
-                id='message'
-                name='message'
-                className='w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition resize-none'
-                rows={4}
-              />
-              <ErrorMessage name='message' component='div' className='text-red-500 text-sm mt-1' />
+          </div>
+        );
+      case 3:
+        return (
+          <div className="space-y-8">
+            <div className="bg-gradient-to-r from-indigo-50 to-white p-6 rounded-lg">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                Share Your Experience
+              </h3>
+
+              <div className="space-y-6">
+                <div className="form-group">
+                  <label htmlFor='learnings' className="block text-sm font-medium text-gray-700 mb-2">
+                    What did you learn from this workshop?
+                  </label>
+                  <Field
+                    as='textarea'
+                    name='learnings'
+                    rows='4'
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 
+                               focus:ring-indigo-500 focus:border-indigo-500 shadow-sm resize-none
+                               placeholder-gray-400"
+                    placeholder="Share your key takeaways and learning experience..."
+                  />
+                  <ErrorMessage name='learnings' component="div" className="mt-1 text-sm text-red-600" />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor='issues' className="block text-sm font-medium text-gray-700 mb-2">
+                    Did you face any challenges or issues?
+                  </label>
+                  <Field
+                    as='textarea'
+                    name='issues'
+                    rows='4'
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 
+                               focus:ring-indigo-500 focus:border-indigo-500 shadow-sm resize-none
+                               placeholder-gray-400"
+                    placeholder="Describe any difficulties or areas for improvement..."
+                  />
+                  <ErrorMessage name='issues' component="div" className="mt-1 text-sm text-red-600" />
+                </div>
+              </div>
             </div>
           </div>
         );
     }
   };
 
-  const handleSubmit = async (values: FormValues) => {
-    console.log(values,'values');
-     };
+  const handleSubmit = async (values: any) => {
+    console.log(values, 'values');
+    const response = await addFeedback({ values }).unwrap();
+    console.log(response, 'response');
+  };
 
   return (
     <>
@@ -407,17 +337,17 @@ const AssesmentForm: React.FC = () => {
                 </div>
                 <div className="mt-2">
                   <p className="text-lg font-medium text-gray-600">
-                    Step {currentStep} of 2: {getStepTitle(currentStep)}
+                    Step {currentStep} of {totalSteps}: {getStepTitle(currentStep)}
                   </p>
                   <div className="w-full max-w-md mx-auto mt-2 h-2 bg-gray-200 rounded-full">
-                    <div 
+                    <div
                       className="h-full bg-indigo-600 rounded-full transition-all duration-300"
-                      style={{ width: `${(currentStep / 2) * 100}%` }}
+                      style={{ width: `${(currentStep / totalSteps) * 100}%` }}
                     ></div>
                   </div>
                 </div>
               </div>
-              
+
               <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
@@ -426,31 +356,37 @@ const AssesmentForm: React.FC = () => {
                 {() => (
                   <Form className='space-y-6'>
                     {renderFormStep()}
-                    
+
                     <div className='flex justify-between mt-8'>
                       {currentStep > 1 && (
                         <button
                           type='button'
                           onClick={prevStep}
-                          className='bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                          className='px-6 py-2.5 bg-gray-600 text-white font-medium text-sm rounded-lg 
+                                     shadow-md hover:bg-gray-700 transition duration-150 ease-in-out
+                                     focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2'
                         >
                           Previous
                         </button>
                       )}
-                      {currentStep < 2 ? (
+                      {currentStep < totalSteps ? (
                         <button
                           type='button'
                           onClick={nextStep}
-                          className='bg-indigo-500 text-white px-6 py-3 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                          className='px-6 py-2.5 bg-indigo-600 text-white font-medium text-sm rounded-lg 
+                                     shadow-md hover:bg-indigo-700 transition duration-150 ease-in-out
+                                     focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                         >
                           Next
                         </button>
                       ) : (
                         <button
                           type='submit'
-                          className='bg-indigo-500 text-white px-6 py-3 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                          className='px-6 py-2.5 bg-indigo-600 text-white font-medium text-sm rounded-lg 
+                                     shadow-md hover:bg-indigo-700 transition duration-150 ease-in-out
+                                     focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                         >
-                          Register
+                          Submit
                         </button>
                       )}
                     </div>

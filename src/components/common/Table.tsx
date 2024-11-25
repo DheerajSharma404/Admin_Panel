@@ -56,7 +56,7 @@ const DynamicTable = ({ data, onEdit, onDelete, onView, onSort, sortField, sortO
   };
 
   return (
-    <div>
+    <div className="w-full overflow-x-auto">
       <div className="mb-4">
         <input
           type="text"

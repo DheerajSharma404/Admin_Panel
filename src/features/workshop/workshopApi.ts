@@ -1,8 +1,9 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CallRequestsResponse, SingleWorkshopEnquiryResponse, WorkshopEnquiriesListResponse } from "../../types";
+import { AssesmentReport, CallRequestsResponse, SingleWorkshopEnquiryResponse, WorkshopEnquiriesListResponse } from "../../types";
+import { FeedbackFormValues } from "../../pages/workshopModule/AssesmentForm";
 
-const baseUrl = 'https://mentoons-backend-zlx3.onrender.com/api/v1';
+const baseUrl = 'http://18.177.129.131:4000/api/v1';
 
 
 
@@ -67,6 +68,23 @@ export const workshopApiSlice = createApi({
                 body: { callId },
             }),
         }),
+        addFeedback: builder.mutation<void, { values: FeedbackFormValues }>({
+            query: ({ values }) => ({
+                url: `/evaluation`,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(values),
+            }),
+        }),
+        getAssesmentReports: builder.query<AssesmentReport, { page: number, limit: number, search: string, sortField: string, sortDirection: "asc" | "desc" }>({
+            query: ({ page, limit, search, sortField, sortDirection }) => ({
+                url: `/evaluation?page=${page}&limit=${limit}&search=${search}&sortField=${sortField}&sortDirection=${sortDirection}`,
+                method: 'GET',
+            }),
+        }),
     }),
 });
 
@@ -79,4 +97,7 @@ export const {
     useGetCallRequestsQuery,
     useUpdateCallRequestMutation,
     useAssignCallRequestMutation,
-    useReallocateCallRequestMutation } = workshopApiSlice;
+    useReallocateCallRequestMutation,
+    useAddFeedbackMutation,
+    useGetAssesmentReportsQuery,
+} = workshopApiSlice;

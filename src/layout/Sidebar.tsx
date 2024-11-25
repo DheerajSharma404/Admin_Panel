@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 const Sidebar = () => {
     const navigate = useNavigate();
     return (
-        <div className="bg-gray-100 shadow-xl rounded-r-3xl p-6 h-full flex flex-col">
+        <div className="bg-gray-100 shadow-xl rounded-r-3xl p-6 h-screen overflow-y-scroll flex flex-col [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100">
             <img src="/assets/logo.png" alt="logo" className="h-[10rem] w-[17rem]" onClick={()=>{navigate('/dashboard')}}/>
             <div className="mb-4">
                 <button
@@ -20,6 +20,7 @@ const Sidebar = () => {
             <nav className="flex-grow">
                 <SidebarSection icon={<FaUsers />} title="Users" items={[
                     { href: "/users", label: "All Users" },
+                    { href: "/allotted-calls", label: "Allotted Calls" },
                 ]} />
                 <SidebarSection icon={<FaBox />} title="Products" items={[
                     { href: "/product-table", label: "All Products" },
@@ -30,6 +31,7 @@ const Sidebar = () => {
                     { href: "/workshop-enquiries", label: "Enquiries" },
                     { href: "/assesment-form", label: "Assessment Form" },
                     { href: "/call-request", label: "Call Requests" },
+                    { href: "/assesment-reports", label: "Assessment Reports" },
                 ]} />
                 <SidebarSection icon={<FaBriefcase />} title="Career Corner" items={[
                     { href: "/all-jobs", label: "All Jobs" },

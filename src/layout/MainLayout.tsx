@@ -7,8 +7,10 @@ import Sidebar from "./Sidebar";
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar />
+    <div className="flex h-screen">
+      <div className="w-[15rem]">
+        <Sidebar />
+      </div>
       <div className="flex flex-col flex-grow">
         <Header />
         <main className="flex-grow overflow-y-scroll p-4 relative">
