@@ -1,4 +1,5 @@
 import { IconType } from "react-icons";
+import { FeedbackFormValues } from "../pages/workshopModule/AssesmentForm";
 
 export interface IAuth {
   email: string;
@@ -212,4 +213,15 @@ export interface StatusConfig {
     border: string;
     label: string;
   };
+}
+
+export interface AssesmentReport {
+  success: boolean;
+  message: string;
+  data: {
+    feedbacks: FeedbackFormValues[];
+    currentPage: number;
+    totalPages: number;
+    totalFeedbacks: number;
+  }
 }

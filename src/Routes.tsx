@@ -5,6 +5,7 @@ import MainLayout from "./layout/MainLayout";
 import {
   AddProducts,
   AllJobs,
+  AllottedCalls,
   AssesmentForm,
   CallRequest,
   CreateJob,
@@ -26,6 +27,7 @@ import {
   ViewProduct,
   ViewUser,
   Welcome,
+  AssesmentReports, 
 } from "./pages/index";
 import TaskStatistics from "./pages/TasksStaistics";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
@@ -240,6 +242,24 @@ const routes = [
     component: (
       <MainLayout>
         <CallRequest />
+      </MainLayout>
+    ),
+    exact: true,
+  },
+  {
+    path: "/allotted-calls",
+    component: (
+      <MainLayout>
+        <AllottedCalls />
+      </MainLayout>
+    ),
+    exact: true,
+  },
+  {
+    path: "/assesment-reports",
+    component: (
+      <MainLayout>
+        <AssesmentReports />
       </MainLayout>
     ),
     exact: true,

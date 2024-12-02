@@ -22,6 +22,8 @@ import ViewUser from "./userModule/ViewUser";
 import ViewEnquiry from "./workshopModule/ViewEnquiry";
 import AssesmentForm from "./workshopModule/AssesmentForm";
 import CallRequest from "./workshopModule/CallRequest";
+import AllottedCalls from "./userModule/AllottedCalls";
+import AssesmentReports from "./productsModule/AssesmentReports";
 export {
   AddProducts,
   AllJobs,
@@ -46,5 +48,7 @@ export {
   ViewUser,
   ViewEnquiry,
   AssesmentForm,
-  CallRequest
+  CallRequest,
+  AllottedCalls,
+  AssesmentReports,
 };

@@ -7,6 +7,7 @@ import { JobData } from '../../types';
 import Loader from '../../components/common/Loader';
 import { errorToast, successToast } from '../../utils/toastResposnse';
 import { useState } from 'react';
+import { useAuth } from '@clerk/clerk-react';
 
 interface JobFormValues {
   jobTitle: string;
@@ -21,6 +22,7 @@ interface JobFormValues {
 const CreateJob: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const {getToken} = useAuth()
   const jobId = location.state?.id;
   const [createJob] = useCreateJobMutation();
   const [updateJob] = useUpdateJobMutation();
@@ -28,12 +30,16 @@ const CreateJob: React.FC = () => {
   const jobData = data?.data
   console.log(jobData)
   const uploadFile = async (file: File): Promise<string> => {
+    const token = await getToken()
     const formData = new FormData();
     formData.append('file', file);
 
     const response = await fetch('https://mentoons-backend-zlx3.onrender.com/api/v1/upload/file', {
       method: 'POST',
       body: formData,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
 
     if (!response.ok) {
