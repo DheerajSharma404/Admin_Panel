@@ -5,7 +5,7 @@ import { JobApplicationResponse, JobData, JobDataResponse, singleJobDataResponse
 
 export const careerApiSlice = createApi({
    reducerPath: 'careerApi',
-   baseQuery: fetchBaseQuery({ baseUrl: 'https://mentoons-backend-zlx3.onrender.com/api/v1/career' }),
+   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:4000/api/v1/career' }),
    tagTypes: ['Jobs'],
    endpoints: (builder) => ({
       getJobs: builder.query<JobDataResponse, {sortOrder: string,searchTerm:string,page:number,limit:number}>({

@@ -2,8 +2,8 @@ import { FaEdit, FaEye, FaTrash, FaSort, FaSortUp, FaSortDown } from "react-icon
 import { ITable } from "../../types";
 
 interface DynamicTableProps extends ITable {
-  onEdit: (row: any) => void;
-  onDelete: (row: any) => void;
+  onEdit: (row: any) => void | undefined;
+  onDelete: (row: any) => void | undefined;
   onView: (row: any) => void;
   onSort: (field: string) => void;
   sortField: string;
@@ -25,7 +25,7 @@ const DynamicTable = ({ data, onEdit, onDelete, onView, onSort, sortField, sortO
   };
 
   const renderProductContent = (key: string, value: any) => {
-    if (key === 'productThumbnail' || key === 'thumbnail') {
+    if (key === 'productThumbnail' || key === 'thumbnail' || key === 'picture') {
       return (
         <img
           src={value}
@@ -56,7 +56,7 @@ const DynamicTable = ({ data, onEdit, onDelete, onView, onSort, sortField, sortO
   };
 
   return (
-    <div>
+    <div className="w-full overflow-x-auto">
       <div className="mb-4">
         <input
           type="text"
@@ -93,42 +93,27 @@ const DynamicTable = ({ data, onEdit, onDelete, onView, onSort, sortField, sortO
                     </td>
                   ))}
                 <td className="px-6 py-4 whitespace-nowrap flex items-center gap-2">
-                  <button onClick={() => onView(row)} className="text-blue-600 hover:text-blue-900 flex items-center">
-                    <FaEye className="mr-1" /> View
-                  </button>
-                  <button onClick={() => onEdit(row)} className="text-yellow-600 hover:text-yellow-900 ml-2 flex items-center">
-                    <FaEdit className="mr-1" /> Edit
-                  </button>
-                  <button onClick={() => onDelete(row)} className="text-red-600 hover:text-red-900 ml-2 flex items-center">
-                    <FaTrash className="mr-1" /> Delete
-                  </button>
+                  {onView && (
+                    <button onClick={() => onView(row)} className="text-blue-600 hover:text-blue-900 flex items-center">
+                      <FaEye className="mr-1" /> View
+                    </button>
+                  )}
+                  {onEdit && (
+                    <button onClick={() => onEdit(row)} className="text-yellow-600 hover:text-yellow-900 ml-2 flex items-center">
+                      <FaEdit className="mr-1" /> Edit
+                    </button>
+                  )}
+                  {onDelete && (
+                    <button onClick={() => onDelete(row)} className="text-red-600 hover:text-red-900 ml-2 flex items-center">
+                      <FaTrash className="mr-1" /> Delete
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      {/* <div className="mt-4 flex justify-between items-center">
-        <div>
-          Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredAndSortedData.length)} of {filteredAndSortedData.length} entries
-        </div>
-        <div>
-          <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className="px-4 py-2 border rounded mr-2"
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, pageCount))}
-            disabled={currentPage === pageCount}
-            className="px-4 py-2 border rounded"
-          >
-            Next
-          </button>
-        </div>
-      </div> */}
     </div>
   );
 };

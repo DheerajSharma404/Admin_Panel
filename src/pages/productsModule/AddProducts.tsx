@@ -12,6 +12,7 @@ const initialValues = {
     productThumbnail: null,
     productSample: null,
     productFile: null,
+    author: '',
 };
 
 const validationSchema = Yup.object({
@@ -21,6 +22,7 @@ const validationSchema = Yup.object({
     productThumbnail: Yup.mixed().required('Thumbnail is required'),
     productSample: Yup.mixed().required('Sample is required'),
     productFile: Yup.mixed().required('Product file is required'),
+    author: Yup.string().required('Author is required'),
 });
 
 const AddProducts = () => {
@@ -164,6 +166,15 @@ const AddProducts = () => {
                                 className='w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
                             />
                             <ErrorMessage name="productFile" component="div" className='text-red-500 text-sm' />
+                        </div>
+                        <div className='space-y-2'>
+                            <label htmlFor="author" className='block text-sm font-medium text-gray-700'>Author</label>
+                            <Field 
+                                id="author"
+                                name="author"
+                                className='w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                            />
+                            <ErrorMessage name="author" component="div" className='text-red-500 text-sm' />
                         </div>
                         <button
                             type="submit"

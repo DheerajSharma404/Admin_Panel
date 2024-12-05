@@ -5,6 +5,9 @@ import MainLayout from "./layout/MainLayout";
 import {
   AddProducts,
   AllJobs,
+  AllottedCalls,
+  AssesmentForm,
+  CallRequest,
   CreateJob,
   Dashboard,
   DashboardAnalytics,
@@ -20,10 +23,14 @@ import {
   UserProfile,
   Users,
   ViewApplications,
+  ViewEnquiry,
   ViewProduct,
+  ViewUser,
   Welcome,
+  AssesmentReports, 
 } from "./pages/index";
 import TaskStatistics from "./pages/TasksStaistics";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
 const routes = [
   { path: "/", component: <Welcome />, exact: true },
   { path: "/dashboard", component: <Dashboard />, exact: true },
@@ -106,7 +113,9 @@ const routes = [
     path: "/add-products",
     component: (
       <MainLayout>
-        <AddProducts />
+        <ProtectedRoutes>
+          <AddProducts />
+        </ProtectedRoutes>
       </MainLayout>
     ),
     exact: true,
@@ -115,7 +124,9 @@ const routes = [
     path: "/product-table",
     component: (
       <MainLayout>
-        <ProductTable />
+        <ProtectedRoutes>
+          <ProductTable />
+        </ProtectedRoutes>
       </MainLayout>
     ),
     exact: true,
@@ -124,7 +135,9 @@ const routes = [
     path: "/products/:productId",
     component: (
       <MainLayout>
-        <ViewProduct />
+        <ProtectedRoutes>
+          <ViewProduct />
+        </ProtectedRoutes>
       </MainLayout>
     ),
     exact: true,
@@ -133,7 +146,9 @@ const routes = [
     path: "/all-jobs",
     component: (
       <MainLayout>
-        <AllJobs />
+        <ProtectedRoutes>
+          <AllJobs />
+        </ProtectedRoutes>
       </MainLayout>
     ),
     exact: true,
@@ -142,7 +157,9 @@ const routes = [
     path: "/hiring-form",
     component: (
       <MainLayout>
-        <CreateJob />
+        <ProtectedRoutes>
+          <CreateJob />
+        </ProtectedRoutes>
       </MainLayout>
     ),
     exact: true,
@@ -151,7 +168,9 @@ const routes = [
     path: "/view-applications",
     component: (
       <MainLayout>
-        <ViewApplications />
+        <ProtectedRoutes>
+          <ViewApplications />
+        </ProtectedRoutes>
       </MainLayout>
     ),
     exact: true,
@@ -160,7 +179,9 @@ const routes = [
     path: "/job-details/:jobId",
     component: (
       <MainLayout>
-        <JobDetails />
+        <ProtectedRoutes>
+          <JobDetails />
+        </ProtectedRoutes>
       </MainLayout>
     ),
     exact: true,
@@ -169,7 +190,9 @@ const routes = [
     path: "/dashboard-analytics",
     component: (
       <MainLayout>
-        <DashboardAnalytics />
+        <ProtectedRoutes>
+          <DashboardAnalytics />
+        </ProtectedRoutes>
       </MainLayout>
     ),
     exact: true,
@@ -178,7 +201,65 @@ const routes = [
     path: "/workshop-enquiries",
     component: (
       <MainLayout>
-        <GetWorkshopEnquiries />
+        <ProtectedRoutes>
+          <GetWorkshopEnquiries />
+        </ProtectedRoutes>
+      </MainLayout>
+    ),
+    exact: true,
+  },
+  {
+    path: "/user/:userId",
+    component: (
+      <MainLayout>
+        <ProtectedRoutes>
+          <ViewUser />
+        </ProtectedRoutes>
+      </MainLayout>
+    ),
+    exact: true,
+  },
+  {
+    path: "/enquiries/:enquiryId",
+    component: (
+      <MainLayout>
+        <ViewEnquiry />
+      </MainLayout>
+    ),
+    exact: true,
+  },
+  {
+    path: "/assesment-form",
+    component: (
+      <MainLayout>
+        <AssesmentForm />
+      </MainLayout>
+    ),
+    exact: true,
+  },
+  {
+    path: "/call-request",
+    component: (
+      <MainLayout>
+        <CallRequest />
+      </MainLayout>
+    ),
+    exact: true,
+  },
+  {
+    path: "/allotted-calls",
+    component: (
+      <MainLayout>
+        <AllottedCalls />
+      </MainLayout>
+    ),
+    exact: true,
+  },
+  {
+    path: "/assesment-reports",
+    component: (
+      <MainLayout>
+        <AssesmentReports />
       </MainLayout>
     ),
     exact: true,
