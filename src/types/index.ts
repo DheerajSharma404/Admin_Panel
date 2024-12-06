@@ -48,8 +48,8 @@ export interface IEvent {
   title: string;
   start: Date;
   end: Date;
-  type: 'event' | 'leave';
-  status?: 'pending' | 'approved' | 'rejected';
+  type: "event" | "leave";
+  status?: "pending" | "approved" | "rejected";
 }
 
 export interface ProductFormValues {
@@ -112,11 +112,11 @@ export interface JobDataResponse {
 export interface JobApplicationResponse {
   success: boolean;
   data: {
-    jobs: JobApplication[],
-    currentPage: number,
-    totalPages: number,
-    totalJobs: number
-  }
+    jobs: JobApplication[];
+    currentPage: number;
+    totalPages: number;
+    totalJobs: number;
+  };
 }
 export interface singleJobDataResponse {
   success: boolean;
@@ -143,8 +143,6 @@ export interface DashboardDataResponse {
     }[];
   };
 }
-
-
 
 export interface WorkshopEnquiry {
   _id: string;
@@ -192,7 +190,7 @@ export interface CallRequestsResponse {
     currentPage: number;
     totalPages: number;
     totalCallRequests: number;
-  }
+  };
 }
 export type CallRequest = {
   _id: string;
@@ -200,7 +198,7 @@ export type CallRequest = {
   phone: string;
   status: string;
   assignedTo?: User[];
-}
+};
 
 export interface AdminUser {
   _id: string;
@@ -223,5 +221,57 @@ export interface AssesmentReport {
     currentPage: number;
     totalPages: number;
     totalFeedbacks: number;
+  };
+}
+export interface ProductImage{
+  _id?: string;
+  imgaeSrc: string;
+}
+export interface ProductVideos{
+  _id?: string;
+  videoSrc: string;
+}
+
+export interface DescriptionList{
+  _id?: string;
+  description: string;
+}
+
+export interface ProductDescription{
+  _id?: string;
+  label: string;
+  descriptionList:DescriptionList[]
+}
+
+export interface ProductReview{
+  _id?: string;
+  userId: string;
+  productId: string;
+  rating: number;
+  review: string;
+}
+
+export interface Sku{
+  _id: string;
+  productTitle: string;
+  productCategory: string;
+  productSummary: string;
+  minAge: number;
+  maxAge: number;
+  ageFilter: string;
+  rating: string;
+  paperEditionPrice: number;
+  printablePrice: number;
+  productImages: ProductImage[];
+  productVidoes: ProductVideos[];
+  productDescriptions: ProductDescription[];
+  productReviews: ProductReview[];
+}
+export interface AllSkuData {
+  success: boolean;
+  message: string;
+  data: {
+    allproducts: Sku[];
+    
   }
 }

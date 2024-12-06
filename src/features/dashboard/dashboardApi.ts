@@ -22,4 +22,4 @@ export const dashboardApiSlice = createApi({
    }),
 });
 
-export const { useGetDashboardDataQuery } = dashboardApiSlice;          
+export const { useGetDashboardDataQuery } = dashboardApiSlice;
