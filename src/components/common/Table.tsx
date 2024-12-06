@@ -1,10 +1,10 @@
 import { FaEdit, FaEye, FaTrash, FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
-import { ITable } from "../../types";
+import { ITable, Product } from "../../types";
 
 interface DynamicTableProps extends ITable {
-  onEdit: (row: any) => void | undefined;
-  onDelete: (row: any) => void | undefined;
-  onView: (row: any) => void;
+  onEdit: (row: Product) => void | undefined;
+  onDelete: (row: Product) => void | undefined;
+  onView: (row: Product) => void;
   onSort: (field: string) => void;
   sortField: string;
   sortOrder: string;

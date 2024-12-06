@@ -9,7 +9,7 @@ import DynamicTable from "../../components/common/Table";
 import { Product } from "../../types";
 import { headings } from "../../utils/constants";
 
-const ProductTable = () => {
+const AllSku = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -132,7 +132,7 @@ const ProductTable = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-6">Products</h1>
+      <h1 className="text-2xl font-bold mb-6">All SKU</h1>
       {isLoading ? (
         <Loader /> // Show loader while loading
       ) : (
@@ -171,4 +171,4 @@ const ProductTable = () => {
   );
 };
 
-export default ProductTable;
+export default AllSku;
